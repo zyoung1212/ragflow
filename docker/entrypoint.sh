@@ -29,7 +29,8 @@ ENABLE_TASKEXECUTOR=1  # Default to enable task executor
 ENABLE_MCP_SERVER=0
 CONSUMER_NO_BEG=0
 CONSUMER_NO_END=0
-WORKERS=1
+WORKERS=1 # Number of task executors
+GUNICORN_WORKERS=${GUNICORN_WORKERS:-4} # Number of Gunicorn workers for the web server
 
 MCP_HOST="127.0.0.1"
 MCP_PORT=9382
@@ -161,10 +162,12 @@ if [[ "${ENABLE_WEBSERVER}" -eq 1 ]]; then
     echo "Starting nginx..."
     /usr/sbin/nginx
 
-    echo "Starting ragflow_server..."
-    while true; do
-        "$PY" api/ragflow_server.py
-    done &
+    echo "Starting ragflow_server with Gunicorn..."
+    # RAGFLOW_HOST_IP and RAGFLOW_HOST_PORT are expected to be available as environment variables,
+    # potentially set through the service_conf.yaml or directly in the environment.
+    exec gunicorn --workers ${GUNICORN_WORKERS:-4} \
+                   --bind ${RAGFLOW_HOST_IP:-0.0.0.0}:${RAGFLOW_HOST_PORT:-9380} \
+                   --preload 'api.apps:app'
 fi
 
 

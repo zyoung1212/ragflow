@@ -6,7 +6,7 @@ set -e
 # Usage and command-line argument parsing
 # -----------------------------------------------------------------------------
 function usage() {
-    echo "Usage: $0 [--disable-webserver] [--disable-taskexecutor] [--consumer-no-beg=<num>] [--consumer-no-end=<num>] [--workers=<num>] [--host-id=<string>]"
+    echo "Usage: $0 [--disable-webserver] [--disable-taskexecutor] [--consumer-no-beg=<num>] [--consumer-no-end=<num>] [--workers=<num>] [--host-id=<string>] [--dev-mode]"
     echo
     echo "  --disable-webserver             Disables the web server (nginx + ragflow_server)."
     echo "  --disable-taskexecutor          Disables task executor workers."
@@ -15,18 +15,21 @@ function usage() {
     echo "  --consumer-no-end=<num>         End range for consumers (if using range-based)."
     echo "  --workers=<num>                 Number of task executors to run (if range is not used)."
     echo "  --host-id=<string>              Unique ID for the host (defaults to \`hostname\`)."
+    echo "  --dev-mode                      Run in development mode (Werkzeug instead of Gunicorn)."
     echo
     echo "Examples:"
     echo "  $0 --disable-taskexecutor"
     echo "  $0 --disable-webserver --consumer-no-beg=0 --consumer-no-end=5"
     echo "  $0 --disable-webserver --workers=2 --host-id=myhost123"
     echo "  $0 --enable-mcpserver"
+    echo "  $0 --dev-mode"
     exit 1
 }
 
 ENABLE_WEBSERVER=1 # Default to enable web server
 ENABLE_TASKEXECUTOR=1  # Default to enable task executor
 ENABLE_MCP_SERVER=0
+DEV_MODE=0  # Default to production mode (Gunicorn)
 CONSUMER_NO_BEG=0
 CONSUMER_NO_END=0
 WORKERS=1
@@ -65,6 +68,10 @@ for arg in "$@"; do
       ;;
     --enable-mcpserver)
       ENABLE_MCP_SERVER=1
+      shift
+      ;;
+    --dev-mode)
+      DEV_MODE=1
       shift
       ;;
     --mcp-host=*)
@@ -153,6 +160,20 @@ function start_mcp_server() {
         --api_key="${MCP_HOST_API_KEY}" &
 }
 
+function start_ragflow_server() {
+    if [[ "${DEV_MODE}" -eq 1 ]]; then
+        echo "Starting ragflow_server in development mode (Werkzeug)..."
+        while true; do
+            "$PY" api/ragflow_server.py --debug
+        done
+    else
+        echo "Starting ragflow_server in production mode (Gunicorn)..."
+        while true; do
+            gunicorn -c gunicorn_config.py api.wsgi:application
+        done
+    fi
+}
+
 # -----------------------------------------------------------------------------
 # Start components based on flags
 # -----------------------------------------------------------------------------
@@ -161,10 +182,7 @@ if [[ "${ENABLE_WEBSERVER}" -eq 1 ]]; then
     echo "Starting nginx..."
     /usr/sbin/nginx
 
-    echo "Starting ragflow_server..."
-    while true; do
-        "$PY" api/ragflow_server.py
-    done &
+    start_ragflow_server &
 fi
 
 

@@ -202,9 +202,13 @@ COPY pyproject.toml uv.lock ./
 COPY mcp mcp
 COPY plugin plugin
 
+# Copy Gunicorn configuration
+COPY gunicorn_config.py ./
+
 COPY docker/service_conf.yaml.template ./conf/service_conf.yaml.template
 COPY docker/entrypoint.sh ./
-RUN chmod +x ./entrypoint*.sh
+COPY docker/launch_production_service.sh ./
+RUN chmod +x ./entrypoint*.sh ./launch_production_service.sh
 
 # Copy compiled web pages
 COPY --from=builder /ragflow/web/dist /ragflow/web/dist

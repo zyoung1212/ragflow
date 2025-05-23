@@ -1,18 +1,21 @@
 #!/bin/bash
 
-# Exit immediately if a command exits with a non-zero status
+# Production service launcher for RAGFlow
+# This script starts RAGFlow in production mode using Gunicorn
+
 set -e
+
+echo "=========================================="
+echo "RAGFlow Production Service Launcher"
+echo "=========================================="
 
 # Function to load environment variables from .env file
 load_env_file() {
-    # Get the directory of the current script
     local script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
     local env_file="$script_dir/.env"
 
-    # Check if .env file exists
     if [ -f "$env_file" ]; then
         echo "Loading environment variables from: $env_file"
-        # Source the .env file
         set -a
         source "$env_file" 
         set +a
@@ -33,27 +36,14 @@ JEMALLOC_PATH=$(pkg-config --variable=libdir jemalloc)/libjemalloc.so
 
 PY=python3
 
-# Parse command line arguments
-DEV_MODE=0
-for arg in "$@"; do
-    case $arg in
-        --dev-mode)
-            DEV_MODE=1
-            shift
-            ;;
-        --production-mode)
-            DEV_MODE=0
-            shift
-            ;;
-        *)
-            # Keep other arguments for backward compatibility
-            ;;
-    esac
-done
-
 # Set default number of workers if WS is not set or less than 1
 if [[ -z "$WS" || $WS -lt 1 ]]; then
   WS=1
+fi
+
+# Set default number of Gunicorn workers
+if [[ -z "$GUNICORN_WORKERS" ]]; then
+  GUNICORN_WORKERS=$(($(nproc) * 2 + 1))
 fi
 
 # Maximum number of retries for each task executor and server
@@ -109,57 +99,55 @@ task_exe(){
     fi
 }
 
-# Function to execute ragflow_server with retry logic
-run_server(){
+# Function to execute ragflow_server with Gunicorn
+run_production_server(){
     local retry_count=0
     while ! $STOP && [ $retry_count -lt $MAX_RETRIES ]; do
-        if [[ "${DEV_MODE}" -eq 1 ]]; then
-            echo "Starting ragflow_server in development mode (Attempt $((retry_count+1)))"
-            $PY api/ragflow_server.py --debug
-        else
-            echo "Starting ragflow_server in production mode with Gunicorn (Attempt $((retry_count+1)))"
-            gunicorn -c gunicorn_config.py api.wsgi:application
-        fi
+        echo "Starting RAGFlow server in production mode with Gunicorn (Workers: $GUNICORN_WORKERS, Attempt: $((retry_count+1)))"
+        echo "Server will be available at: http://0.0.0.0:${HOST_PORT:-9380}"
+        
+        # Export environment variables for Gunicorn config
+        export GUNICORN_WORKERS
+        
+        gunicorn -c gunicorn_config.py api.wsgi:application
         EXIT_CODE=$?
+        
         if [ $EXIT_CODE -eq 0 ]; then
-            echo "ragflow_server exited successfully."
+            echo "RAGFlow server exited successfully."
             break
         else
-            echo "ragflow_server failed with exit code $EXIT_CODE. Retrying..." >&2
+            echo "RAGFlow server failed with exit code $EXIT_CODE. Retrying..." >&2
             retry_count=$((retry_count + 1))
             sleep 2
         fi
     done
 
     if [ $retry_count -ge $MAX_RETRIES ]; then
-        echo "ragflow_server failed after $MAX_RETRIES attempts. Exiting..." >&2
+        echo "RAGFlow server failed after $MAX_RETRIES attempts. Exiting..." >&2
         cleanup
     fi
 }
 
-# Display mode information
-if [[ "${DEV_MODE}" -eq 1 ]]; then
-    echo "=========================================="
-    echo "Running in DEVELOPMENT mode (Werkzeug)"
-    echo "Use --production-mode for production deployment"
-    echo "=========================================="
-else
-    echo "=========================================="
-    echo "Running in PRODUCTION mode (Gunicorn)"
-    echo "Use --dev-mode for development"
-    echo "=========================================="
-fi
+echo "Production Mode Configuration:"
+echo "  - Task Executor Workers: $WS"
+echo "  - Gunicorn Workers: $GUNICORN_WORKERS"
+echo "  - Host Port: ${HOST_PORT:-9380}"
+echo "  - Python Path: $PYTHONPATH"
+echo "=========================================="
 
 # Start task executors
+echo "Starting $WS task executor(s)..."
 for ((i=0;i<WS;i++))
 do
   task_exe "$i" &
   PIDS+=($!)
 done
 
-# Start the main server
-run_server &
+# Start the main server with Gunicorn
+run_production_server &
 PIDS+=($!)
 
+echo "All services started. Waiting for processes..."
+
 # Wait for all background processes to finish
-wait
+wait 

@@ -1,5 +1,5 @@
 version = 1
-revision = 1
+revision = 2
 requires-python = ">=3.10, <3.13"
 resolution-markers = [
     "python_full_version >= '3.12' and sys_platform == 'darwin'",
@@ -2148,6 +2148,18 @@ dependencies = [
 sdist = { url = "https://mirrors.aliyun.com/pypi/packages/d7/53/a911467bece076020456401f55a27415d2d70d3bc2c37af06b44ea41fc5c/grpcio_status-1.71.0.tar.gz", hash = "sha256:11405fed67b68f406b3f3c7c5ae5104a79d2d309666d10d61b152e91d28fb968" }
 wheels = [
     { url = "https://mirrors.aliyun.com/pypi/packages/ad/d6/31fbc43ff097d8c4c9fc3df741431b8018f67bf8dfbe6553a555f6e5f675/grpcio_status-1.71.0-py3-none-any.whl", hash = "sha256:843934ef8c09e3e858952887467f8256aac3910c55f077a359a65b2b3cde3e68" },
+]
+
+[[package]]
+name = "gunicorn"
+version = "21.2.0"
+source = { registry = "https://mirrors.aliyun.com/pypi/simple" }
+dependencies = [
+    { name = "packaging" },
+]
+sdist = { url = "https://mirrors.aliyun.com/pypi/packages/06/89/acd9879fa6a5309b4bf16a5a8855f1e58f26d38e0c18ede9b3a70996b021/gunicorn-21.2.0.tar.gz", hash = "sha256:88ec8bff1d634f98e61b9f65bc4bf3cd918a90806c6f5c48bc5603849ec81033" }
+wheels = [
+    { url = "https://mirrors.aliyun.com/pypi/packages/0e/2a/c3a878eccb100ccddf45c50b6b8db8cf3301a6adede6e31d48e8531cab13/gunicorn-21.2.0-py3-none-any.whl", hash = "sha256:3213aa5e8c24949e792bcacfc176fef362e7aac80b76c56f6b5122bf350722f0" },
 ]
 
 [[package]]
@@ -4854,6 +4866,7 @@ dependencies = [
     { name = "google-search-results" },
     { name = "graspologic" },
     { name = "groq" },
+    { name = "gunicorn" },
     { name = "hanziconv" },
     { name = "html-text" },
     { name = "httpx" },
@@ -4992,6 +5005,7 @@ requires-dist = [
     { name = "google-search-results", specifier = "==2.4.2" },
     { name = "graspologic", specifier = ">=3.4.1,<4.0.0" },
     { name = "groq", specifier = "==0.9.0" },
+    { name = "gunicorn", specifier = ">=21.2.0,<22.0.0" },
     { name = "hanziconv", specifier = "==0.3.2" },
     { name = "html-text", specifier = "==0.6.2" },
     { name = "httpx", specifier = "==0.27.0" },

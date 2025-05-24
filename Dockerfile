@@ -70,7 +70,12 @@ RUN if [ "$NEED_MIRROR" == "1" ]; then \
         echo 'url = "https://mirrors.aliyun.com/pypi/simple"' >> /etc/uv/uv.toml && \
         echo "default = true" >> /etc/uv/uv.toml; \
     fi; \
-    pipx install uv
+        # 尝试安装uv，如果失败则使用官方源
+    pipx install uv || \
+    { echo "Failed to install uv from mirror, trying official PyPI..."; \
+      pip3 config unset global.index-url; \
+      pip3 config unset global.trusted-host; \
+      pipx install uv; }
 
 ENV PYTHONDONTWRITEBYTECODE=1 DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
 ENV PATH=/root/.local/bin:$PATH

@@ -11,7 +11,7 @@ workers = int(os.environ.get('GUNICORN_WORKERS', min(multiprocessing.cpu_count()
 worker_class = 'sync'
 worker_connections = 1000
 timeout = 300
-keepalive = 2
+keepalive = 10
 max_requests = 1000
 max_requests_jitter = 100
 

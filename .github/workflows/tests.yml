@@ -29,7 +29,7 @@ jobs:
     # https://docs.github.com/en/actions/using-jobs/using-conditions-to-control-job-execution
     # https://github.com/orgs/community/discussions/26261
     if: ${{ github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'ci') }}
-    runs-on: [ "self-hosted", "debug" ]
+    runs-on: self-hosted
     steps:
       # https://github.com/hmarr/debug-action
       #- uses: hmarr/debug-action@v2
@@ -83,7 +83,7 @@ jobs:
       - name: Run sdk tests against Elasticsearch
         run: |
           export http_proxy=""; export https_proxy=""; export no_proxy=""; export HTTP_PROXY=""; export HTTPS_PROXY=""; export NO_PROXY=""
-          export HOST_ADDRESS=http://host.docker.internal:9380
+          export HOST_ADDRESS=http://172.17.0.1:9380
           until sudo docker exec ragflow-server curl -s --connect-timeout 5 ${HOST_ADDRESS} > /dev/null; do
             echo "Waiting for service to be available..."
             sleep 5
@@ -93,7 +93,7 @@ jobs:
       - name: Run frontend api tests against Elasticsearch
         run: |
           export http_proxy=""; export https_proxy=""; export no_proxy=""; export HTTP_PROXY=""; export HTTPS_PROXY=""; export NO_PROXY=""
-          export HOST_ADDRESS=http://host.docker.internal:9380
+          export HOST_ADDRESS=http://172.17.0.1:9380
           until sudo docker exec ragflow-server curl -s --connect-timeout 5 ${HOST_ADDRESS} > /dev/null; do
             echo "Waiting for service to be available..."
             sleep 5
@@ -103,7 +103,7 @@ jobs:
       - name: Run http api tests against Elasticsearch
         run: |
           export http_proxy=""; export https_proxy=""; export no_proxy=""; export HTTP_PROXY=""; export HTTPS_PROXY=""; export NO_PROXY=""
-          export HOST_ADDRESS=http://host.docker.internal:9380
+          export HOST_ADDRESS=http://172.17.0.1:9380
           until sudo docker exec ragflow-server curl -s --connect-timeout 5 ${HOST_ADDRESS} > /dev/null; do
             echo "Waiting for service to be available..."
             sleep 5
@@ -127,7 +127,7 @@ jobs:
       - name: Run sdk tests against Infinity
         run: |
           export http_proxy=""; export https_proxy=""; export no_proxy=""; export HTTP_PROXY=""; export HTTPS_PROXY=""; export NO_PROXY=""
-          export HOST_ADDRESS=http://host.docker.internal:9380
+          export HOST_ADDRESS=http://172.17.0.1:9380
           until sudo docker exec ragflow-server curl -s --connect-timeout 5 ${HOST_ADDRESS} > /dev/null; do
             echo "Waiting for service to be available..."
             sleep 5
@@ -137,7 +137,7 @@ jobs:
       - name: Run frontend api tests against Infinity
         run: |
           export http_proxy=""; export https_proxy=""; export no_proxy=""; export HTTP_PROXY=""; export HTTPS_PROXY=""; export NO_PROXY=""
-          export HOST_ADDRESS=http://host.docker.internal:9380
+          export HOST_ADDRESS=http://172.17.0.1:9380
           until sudo docker exec ragflow-server curl -s --connect-timeout 5 ${HOST_ADDRESS} > /dev/null; do
             echo "Waiting for service to be available..."
             sleep 5
@@ -147,7 +147,7 @@ jobs:
       - name: Run http api tests against Infinity
         run: |
           export http_proxy=""; export https_proxy=""; export no_proxy=""; export HTTP_PROXY=""; export HTTPS_PROXY=""; export NO_PROXY=""
-          export HOST_ADDRESS=http://host.docker.internal:9380
+          export HOST_ADDRESS=http://172.17.0.1:9380
           until sudo docker exec ragflow-server curl -s --connect-timeout 5 ${HOST_ADDRESS} > /dev/null; do
             echo "Waiting for service to be available..."
             sleep 5

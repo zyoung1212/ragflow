@@ -9,6 +9,7 @@ backlog = 2048
 # Worker processes
 workers = int(os.environ.get('GUNICORN_WORKERS', min(multiprocessing.cpu_count() * 2 + 1, 8)))
 worker_class = 'sync'
+
 worker_connections = 1000
 timeout = 300
 keepalive = 10

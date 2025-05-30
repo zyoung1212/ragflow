@@ -1,4 +1,5 @@
 # Gunicorn configuration file for RAGFlow production deployment
+import multiprocessing
 import os
 
 # Server socket

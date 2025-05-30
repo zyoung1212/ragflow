@@ -52,7 +52,7 @@ raw_env = [
 
 def when_ready(server):
     """Called just after the server is started."""
-    server.log.info("RAGFlow Gunicorn server is ready. Production mode active.")
+    server.log.info("RAGFlow Gunicor n server is ready. Production mode active.")
 
 def worker_int(worker):
     """Called just after a worker exited on SIGINT or SIGQUIT."""

@@ -7,7 +7,7 @@ bind = f"{os.environ.get('RAGFLOW_HOST_IP', '0.0.0.0')}:{os.environ.get('RAGFLOW
 backlog = 2048
 
 # Worker processes
-workers = 4
+workers = os.environ.get('GUNICORN_WORKERS')
 worker_class = 'sync'
 worker_connections = 1000
 timeout = 120

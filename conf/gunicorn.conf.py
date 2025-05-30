@@ -8,10 +8,10 @@ backlog = 2048
 # Worker processes
 workers = os.environ.get('GUNICORN_WORKERS')
 worker_class = 'sync'
-worker_connections = 1000
+worker_connections = 10000
 timeout = 120
 keepalive = 2
-max_requests = 1000
+max_requests = 10000
 max_requests_jitter = 100
 
 # Restart workers after this many requests, to help prevent memory leaks

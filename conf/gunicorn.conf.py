@@ -6,12 +6,12 @@ bind = f"{os.environ.get('RAGFLOW_HOST_IP', '0.0.0.0')}:{os.environ.get('RAGFLOW
 backlog = 2048
 
 # Worker processes
-workers = os.environ.get('GUNICORN_WORKERS')
+workers = int(os.environ.get('GUNICORN_WORKERS', min(multiprocessing.cpu_count() * 2 + 1, 8)))
 worker_class = 'sync'
-worker_connections = 100
+worker_connections = 1000
 timeout = 300
 keepalive = 2
-max_requests = 500
+max_requests = 1000
 max_requests_jitter = 100
 
 # Restart workers after this many requests, to help prevent memory leaks

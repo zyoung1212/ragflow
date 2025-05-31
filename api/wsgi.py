@@ -113,17 +113,8 @@ def initialize_ragflow():
     signal.signal(signal.SIGTERM, signal_handler)
 
     # Start background progress update task
-    # 只在主进程中启动后台任务，避免多个worker重复执行
-    if os.environ.get('SERVER_SOFTWARE', '').startswith('gunicorn'):
-        # 在Gunicorn环境下，只在master进程启动后台任务
-        import multiprocessing
-        if multiprocessing.current_process().name == 'MainProcess':
-            background_executor = ThreadPoolExecutor(max_workers=1)
-            background_executor.submit(update_progress)
-    else:
-        # 非Gunicorn环境（如开发模式）正常启动
-        background_executor = ThreadPoolExecutor(max_workers=1)
-        background_executor.submit(update_progress)
+    background_executor = ThreadPoolExecutor(max_workers=1)
+    background_executor.submit(update_progress)
 
     logging.info("RAGFlow WSGI application initialized successfully in production mode")
 

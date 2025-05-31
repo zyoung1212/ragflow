@@ -195,14 +195,9 @@ if [[ "${ENABLE_WEBSERVER}" -eq 1 ]]; then
     echo "Gunicorn config: Workers=${GUNICORN_WORKERS}, Host=${RAGFLOW_HOST}, Port=${RAGFLOW_PORT}"
 
     # Check if gunicorn config file exists and use it, otherwise use command line options
-    # 在Gunicorn配置部分，建议添加健康检查
     if [[ -f "/ragflow/conf/gunicorn.conf.py" ]]; then
-    echo "Using Gunicorn configuration file..."
-    # 添加健康检查和优雅关闭
-    exec gunicorn --config /ragflow/conf/gunicorn.conf.py \
-                   --capture-output \
-                   --enable-stdio-inheritance \
-                   'api.wsgi:application'
+        echo "Using Gunicorn configuration file..."
+        exec gunicorn --config /ragflow/conf/gunicorn.conf.py 'api.wsgi:application'
     else
         echo "Using Gunicorn command line configuration..."
         # Start gunicorn with our WSGI application

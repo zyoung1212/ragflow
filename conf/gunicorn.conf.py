@@ -49,8 +49,6 @@ worker_tmp_dir = '/dev/shm'  # Use memory for temporary files if available
 # Environment variables that gunicorn should pass to workers
 raw_env = [
     'PYTHONPATH=/ragflow/',
-    'GUNICORN_WORKER_CLASS=gevent',  # Indicate we're using gevent worker
-    'RAGFLOW_FORCE_GEVENT=1',        # Force gevent patches in RAGFlow
 ]
 
 def when_ready(server):

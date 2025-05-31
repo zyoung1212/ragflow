@@ -186,15 +186,6 @@ if [[ "${ENABLE_WEBSERVER}" -eq 1 ]]; then
     /usr/sbin/nginx
 
     echo "Starting ragflow_server with Gunicorn (Production Mode)..."
-    
-    # Initialize gevent environment before starting Gunicorn
-    echo "Initializing gevent environment..."
-    python3 /ragflow/docker/gevent_startup.py
-    if [ $? -ne 0 ]; then
-        echo "Failed to initialize gevent environment" >&2
-        exit 1
-    fi
-    
     # Get host and port from environment variables or use defaults
     RAGFLOW_HOST=${RAGFLOW_HOST_IP:-0.0.0.0}
     RAGFLOW_PORT=${RAGFLOW_HOST_PORT:-9380}

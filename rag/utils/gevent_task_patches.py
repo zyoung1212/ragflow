@@ -25,7 +25,7 @@ components that need special handling beyond basic monkey patching.
 
 import os
 import logging
-from typing import Optional, Callable, Any
+from typing import Optional, Callable
 
 
 def is_gevent_enabled() -> bool:
@@ -181,8 +181,8 @@ def patch_task_executor_imports():
         return
     
     try:
-        import sys
-        from unittest.mock import patch
+        import sys  # noqa: F401
+        from unittest.mock import patch  # noqa: F401
         
         # Create a mock module that provides gevent-compatible implementations
         class GeventTaskModule:
@@ -244,7 +244,7 @@ def init_task_gevent_environment():
         
         # Set up gevent-specific configurations
         try:
-            import gevent
+            import gevent  # noqa: F401
             from gevent import monkey
             
             # Ensure all necessary patches are applied

@@ -53,7 +53,7 @@ def should_apply_patches():
             return True
         # If no explicit worker class but we detect gevent usage
         try:
-            import gevent
+            import gevent  # noqa: F401
             return True
         except ImportError:
             pass
@@ -80,7 +80,7 @@ def apply_gevent_patches():
     - builtins: Usually not needed and can cause issues
     """
     try:
-        from gevent import monkey
+        from gevent import monkey  # noqa: F401
         
         # Apply comprehensive patches but exclude signal to avoid conflicts with gunicorn
         monkey.patch_all(
@@ -121,8 +121,8 @@ def _patch_redis_connections():
     """
     try:
         # Ensure redis-py uses gevent-compatible connections
-        import redis
-        from gevent import socket as gevent_socket
+        import redis  # noqa: F401
+        from gevent import socket as gevent_socket  # noqa: F401
         
         # Redis connection pool should use gevent sockets
         # This is usually handled automatically by monkey patching,
@@ -147,7 +147,7 @@ def _patch_database_connections():
         
         # Ensure psycopg2 works with gevent if available
         try:
-            import psycopg2
+            import psycopg2  # noqa: F401
             from psycopg2 import extensions
             # Enable async mode for psycopg2 if using gevent
             extensions.set_wait_callback(lambda conn: None)
@@ -166,9 +166,9 @@ def _patch_http_libraries():
     try:
         # Requests library should work with gevent after monkey patching,
         # but we can ensure urllib3 uses gevent-compatible connections
-        import requests
-        from requests.adapters import HTTPAdapter
-        from urllib3.util.connection import create_connection
+        import requests  # noqa: F401
+        from requests.adapters import HTTPAdapter  # noqa: F401
+        from urllib3.util.connection import create_connection  # noqa: F401
         
         logging.debug("HTTP libraries gevent compatibility ensured")
         
@@ -184,8 +184,8 @@ def configure_gevent_logging():
     Configure logging to work properly with gevent.
     """
     try:
-        import gevent
-        from gevent import monkey
+        import gevent  # noqa: F401
+        from gevent import monkey  # noqa: F401
         
         # Ensure logging works correctly with gevent
         # This is usually handled by monkey patching, but we can be explicit

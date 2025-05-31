@@ -89,7 +89,7 @@ def configure_gevent_settings():
     """
     try:
         import gevent
-        from gevent import config
+        from gevent import config  # noqa: F401
         
         # Configure gevent resolver
         # Use c-ares for better DNS performance if available
@@ -101,7 +101,7 @@ def configure_gevent_settings():
             logger.info("Using default gevent resolver")
         
         # Configure gevent hub
-        hub = gevent.get_hub()
+        hub = gevent.get_hub()  # noqa: F841
         
         # Set reasonable defaults for connection pooling
         os.environ.setdefault('GEVENT_RESOLVER_TIMEOUT', '10')
@@ -162,7 +162,7 @@ def validate_gevent_setup():
             return False
         
         # Test basic gevent functionality
-        import gevent.socket
+        import gevent.socket  # noqa: F401
         logger.info("Gevent socket module available")
         
         logger.info("Gevent setup validation passed")

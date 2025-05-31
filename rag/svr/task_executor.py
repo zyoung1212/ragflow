@@ -16,6 +16,11 @@
 # from beartype import BeartypeConf
 # from beartype.claw import beartype_all  # <-- you didn't sign up for this
 # beartype_all(conf=BeartypeConf(violation_type=UserWarning))    # <-- emit warnings from all code
+
+# Apply gevent-specific patches for task execution
+from rag.utils.gevent_task_patches import init_task_gevent_environment
+init_task_gevent_environment()
+
 import random
 import sys
 import threading

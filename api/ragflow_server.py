@@ -18,6 +18,11 @@
 # from beartype.claw import beartype_all  # <-- you didn't sign up for this
 # beartype_all(conf=BeartypeConf(violation_type=UserWarning))    # <-- emit warnings from all code
 
+# IMPORTANT: Apply gevent monkey patches BEFORE importing any other modules
+# This ensures consistency between development and production modes
+from api.utils.gevent_patches import init_gevent_environment
+init_gevent_environment()
+
 from api.utils.log_utils import initRootLogger
 from plugin import GlobalPluginManager
 initRootLogger("ragflow_server")

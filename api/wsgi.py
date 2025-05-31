@@ -14,6 +14,11 @@
 #  limitations under the License.
 #
 
+# IMPORTANT: Apply gevent monkey patches BEFORE importing any other modules
+# This must be the very first import to ensure proper async behavior
+from api.utils.gevent_patches import init_gevent_environment
+init_gevent_environment()
+
 from api.utils.log_utils import initRootLogger
 from plugin import GlobalPluginManager
 

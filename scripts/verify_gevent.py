@@ -163,7 +163,7 @@ def test_ragflow_integration() -> List[Tuple[str, bool, str]]:
     
     # 测试 gevent_patches 模块
     try:
-        from api.utils.gevent_patches import should_apply_patches, init_gevent_environment  # noqa: F401
+        from api.utils.gevent_patches import should_apply_patches, init_gevent_environment
         should_patch = should_apply_patches()
         test_results.append(("gevent_patches 模块", True, f"should_apply_patches: {should_patch}"))
         logger.info(f"  gevent_patches 模块: ✓ (should_apply_patches: {should_patch})")

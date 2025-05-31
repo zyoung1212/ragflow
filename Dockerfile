@@ -204,6 +204,7 @@ COPY plugin plugin
 
 COPY docker/service_conf.yaml.template ./conf/service_conf.yaml.template
 COPY docker/entrypoint.sh ./
+COPY docker/gevent_startup.py ./docker/
 RUN chmod +x ./entrypoint*.sh
 
 # Copy compiled web pages

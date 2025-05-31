@@ -204,10 +204,10 @@ if [[ "${ENABLE_WEBSERVER}" -eq 1 ]]; then
                    --enable-stdio-inheritance \
                    'api.wsgi:application'
     else
-        echo "Using Gunicorn command line configuration..."
-        # Start gunicorn with our WSGI application
+        echo "Using Gunicorn command line configuration with gevent..."
+        # Start gunicorn with gevent worker class
         exec gunicorn --workers ${GUNICORN_WORKERS} \
-                       --worker-class sync \
+                       --worker-class gevent \
                        --worker-connections 1000 \
                        --max-requests 1000 \
                        --max-requests-jitter 100 \

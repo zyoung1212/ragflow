@@ -117,7 +117,7 @@ jobs:
           cd sdk/python && uv sync --python 3.10 --group test --frozen && source .venv/bin/activate && cd test/test_http_api && pytest -s --tb=short --level=${HTTP_API_TEST_LEVEL}
 
       - name: Stop ragflow:nightly
-        if: always()  # always run this step even if previous steps failed
+        if: always()  # always run this step even if previ ous steps failed
         run: |
           sudo docker compose -f docker/docker-compose.yml down -v
 

@@ -32,7 +32,7 @@ jobs:
     if: ${{ github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'ci') }}
     runs-on: self-hosted
     steps:
-      # https://github.com/hmarr/debug-action
+      # https://github.com/hmarr/debug-act ion
       #- uses: hmarr/debug-action@v2
 
       - name: Show who triggered this workflow

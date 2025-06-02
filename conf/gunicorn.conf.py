@@ -34,9 +34,9 @@ pidfile = '/tmp/ragflow_gunicorn.pid'
 tmp_upload_dir = None
 
 # Security
-limit_request_line = 8192
-limit_request_fields = 200
-limit_request_field_size = 8190
+# limit_request_line = 8192
+# limit_request_fields = 200
+# limit_request_field_size = 8190
 
 # Performance tuning for RAGFlow
 worker_tmp_dir = '/dev/shm'  # Use memory for temporary files if available

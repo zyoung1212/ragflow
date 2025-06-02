@@ -8,9 +8,10 @@ backlog = 20480
 
 # Worker processes
 workers = int(os.environ.get('GUNICORN_WORKERS', min(multiprocessing.cpu_count() * 2 + 1, 8)))
-worker_class = 'sync'
+worker_class = 'gevent'
 
-worker_connections = 20000
+# Gevent-specific settings
+worker_connections = 1000  # Reduced for gevent as it handles more connections per worker
 timeout = 300
 keepalive = 10
 max_requests = 20000
@@ -34,9 +35,9 @@ pidfile = '/tmp/ragflow_gunicorn.pid'
 tmp_upload_dir = None
 
 # Security
-# limit_request_line = 8192
-# limit_request_fields = 200
-# limit_request_field_size = 8190
+limit_request_line = 8192
+limit_request_fields = 200
+limit_request_field_size = 8190
 
 # Performance tuning for RAGFlow
 worker_tmp_dir = '/dev/shm'  # Use memory for temporary files if available

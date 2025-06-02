@@ -14,6 +14,12 @@
 #  limitations under the License.
 #
 
+# Gevent monkey patching - must be done before importing other modules
+import os
+if os.environ.get('GUNICORN_WORKER_CLASS') == 'gevent':
+    from gevent import monkey
+    monkey.patch_all()
+
 from api.utils.log_utils import initRootLogger
 from plugin import GlobalPluginManager
 
@@ -25,7 +31,13 @@ import os
 import signal
 import threading
 import uuid
-from concurrent.futures import ThreadPoolExecutor
+try:
+    # Try to use gevent's thread pool if available
+    from gevent.threadpool import ThreadPool
+    USE_GEVENT_THREADPOOL = True
+except ImportError:
+    from concurrent.futures import ThreadPoolExecutor
+    USE_GEVENT_THREADPOOL = False
 
 from api import settings
 from api.apps import app
@@ -69,7 +81,10 @@ def signal_handler(sig, frame):
     logging.info("Received interrupt signal, shutting down...")
     stop_event.set()
     if background_executor:
-        background_executor.shutdown(wait=False)
+        if USE_GEVENT_THREADPOOL:
+            background_executor.kill()
+        else:
+            background_executor.shutdown(wait=False)
 
 
 def initialize_ragflow():
@@ -113,8 +128,12 @@ def initialize_ragflow():
     signal.signal(signal.SIGTERM, signal_handler)
 
     # Start background progress update task
-    background_executor = ThreadPoolExecutor(max_workers=1)
-    background_executor.submit(update_progress)
+    if USE_GEVENT_THREADPOOL:
+        background_executor = ThreadPool(maxsize=1)
+        background_executor.spawn(update_progress)
+    else:
+        background_executor = ThreadPoolExecutor(max_workers=1)
+        background_executor.submit(update_progress)
 
     logging.info("RAGFlow WSGI application initialized successfully in production mode")
 

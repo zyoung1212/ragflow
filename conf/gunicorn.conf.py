@@ -4,7 +4,7 @@ import os
 
 # Server socket
 bind = f"{os.environ.get('RAGFLOW_HOST_IP', '0.0.0.0')}:{os.environ.get('RAGFLOW_HOST_PORT', '9380')}"
-backlog = 2048
+backlog = 20480
 
 # Worker processes
 workers = int(os.environ.get('GUNICORN_WORKERS', min(multiprocessing.cpu_count() * 2 + 1, 8)))
@@ -13,7 +13,7 @@ worker_class = 'sync'
 worker_connections = 1000
 timeout = 300
 keepalive = 10
-max_requests = 1000
+max_requests = 10000
 max_requests_jitter = 100
 
 # Restart workers after this many requests, to help prevent memory leaks
@@ -22,7 +22,7 @@ preload_app = True
 # Logging
 accesslog = '-'
 errorlog = '-'
-loglevel = 'info'
+loglevel = 'debug'
 access_log_format = '%(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s" %(D)s'
 
 # Process naming

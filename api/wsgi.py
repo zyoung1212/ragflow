@@ -36,7 +36,6 @@ initRootLogger("ragflow_server")
 import logging
 import signal
 import threading
-import time
 import uuid
 from concurrent.futures import ThreadPoolExecutor
 

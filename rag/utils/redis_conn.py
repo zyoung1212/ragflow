@@ -17,8 +17,6 @@
 import logging
 import json
 import uuid
-import os
-import threading
 
 import valkey as redis
 from rag import settings
@@ -49,10 +47,8 @@ class RedisMsg:
         return self.__msg_id
 
 
+@singleton
 class RedisDB:
-    _instance = None
-    _lock = threading.Lock()
-    
     lua_delete_if_equal = None
     LUA_DELETE_IF_EQUAL_SCRIPT = """
         local current_value = redis.call('get', KEYS[1])
@@ -63,65 +59,17 @@ class RedisDB:
         return 0
     """
 
-    def __new__(cls):
-        if cls._instance is None:
-            with cls._lock:
-                if cls._instance is None:
-                    cls._instance = super(RedisDB, cls).__new__(cls)
-                    cls._instance._initialized = False
-        return cls._instance
-
     def __init__(self):
-        if self._initialized:
-            return
-        
         self.REDIS = None
         self.config = settings.REDIS
-        self._local = threading.local()
         self.__open__()
-        self._initialized = True
 
     def register_scripts(self) -> None:
         cls = self.__class__
-        client = self.get_connection()
-        if client:
-            cls.lua_delete_if_equal = client.register_script(cls.LUA_DELETE_IF_EQUAL_SCRIPT)
-
-    def get_connection(self):
-        """获取线程本地的Redis连接"""
-        if not hasattr(self._local, 'redis_client') or self._local.redis_client is None:
-            try:
-                self._local.redis_client = redis.StrictRedis(
-                    host=self.config["host"].split(":")[0],
-                    port=int(self.config.get("host", ":6379").split(":")[1]),
-                    db=int(self.config.get("db", 1)),
-                    password=self.config.get("password"),
-                    decode_responses=True,
-                    # 添加连接池配置
-                    connection_pool=redis.ConnectionPool(
-                        host=self.config["host"].split(":")[0],
-                        port=int(self.config.get("host", ":6379").split(":")[1]),
-                        db=int(self.config.get("db", 1)),
-                        password=self.config.get("password"),
-                        decode_responses=True,
-                        max_connections=20,  # 每个进程最大连接数
-                        retry_on_timeout=True,
-                        socket_keepalive=True,
-                        socket_keepalive_options={},
-                        health_check_interval=30,
-                    )
-                )
-                # 为每个连接注册脚本
-                if not self.lua_delete_if_equal:
-                    self.lua_delete_if_equal = self._local.redis_client.register_script(self.LUA_DELETE_IF_EQUAL_SCRIPT)
-            except Exception as e:
-                logging.warning(f"Redis can't be connected: {e}")
-                self._local.redis_client = None
-        
-        return self._local.redis_client
+        client = self.REDIS
+        cls.lua_delete_if_equal = client.register_script(cls.LUA_DELETE_IF_EQUAL_SCRIPT)
 
     def __open__(self):
-        # 主连接仅用于兼容性，实际使用get_connection()
         try:
             self.REDIS = redis.StrictRedis(
                 host=self.config["host"].split(":")[0],
@@ -131,51 +79,39 @@ class RedisDB:
                 decode_responses=True,
             )
             self.register_scripts()
-        except Exception as e:
-            logging.warning(f"Redis can't be connected: {e}")
+        except Exception:
+            logging.warning("Redis can't be connected.")
         return self.REDIS
 
     def health(self):
-        client = self.get_connection()
-        if not client:
-            return False
-        try:
-            client.ping()
-            a, b = "xx", "yy"
-            client.set(a, b, 3)
-            return client.get(a) == b
-        except Exception as e:
-            logging.warning(f"Redis health check failed: {e}")
-            return False
+        self.REDIS.ping()
+        a, b = "xx", "yy"
+        self.REDIS.set(a, b, 3)
+
+        if self.REDIS.get(a) == b:
+            return True
 
     def is_alive(self):
-        return self.get_connection() is not None
+        return self.REDIS is not None
 
     def exist(self, k):
-        client = self.get_connection()
-        if not client:
-            return False
+        if not self.REDIS:
+            return
         try:
-            return client.exists(k)
+            return self.REDIS.exists(k)
         except Exception as e:
             logging.warning("RedisDB.exist " + str(k) + " got exception: " + str(e))
-            # 重置连接
-            self._local.redis_client = None
-            return False
+            self.__open__()
 
     def get(self, k):
-        client = self.get_connection()
-        if not client:
-            return None
+        if not self.REDIS:
+            return
         try:
-            return client.get(k)
+            return self.REDIS.get(k)
         except Exception as e:
             logging.warning("RedisDB.get " + str(k) + " got exception: " + str(e))
-            # 重置连接
-            self._local.redis_client = None
-            return None
+            self.__open__()
 
-    # 其他方法类似地修改，都使用get_connection()而不是self.REDIS
     def set_obj(self, k, obj, exp=3600):
         try:
             self.REDIS.set(k, json.dumps(obj, ensure_ascii=False), exp)
@@ -381,19 +317,22 @@ class RedisDB:
         return None
 
     def delete_if_equal(self, key: str, expected_value: str) -> bool:
-        """原子性删除操作"""
-        client = self.get_connection()
-        if not client or not self.lua_delete_if_equal:
-            return False
+        """
+        Do follwing atomically:
+        Delete a key if its value is equals to the given one, do nothing otherwise.
+        """
+        return bool(self.lua_delete_if_equal(keys=[key], args=[expected_value], client=self.REDIS))
+
+    def delete(self, key) -> bool:
         try:
-            return bool(self.lua_delete_if_equal(keys=[key], args=[expected_value], client=client))
+            self.REDIS.delete(key)
+            return True
         except Exception as e:
-            logging.warning(f"RedisDB.delete_if_equal {key} got exception: {e}")
-            self._local.redis_client = None
-            return False
-
-
-# 移除@singleton装饰器，使用新的单例实现
+            logging.warning("RedisDB.delete " + str(key) + " got exception: " + str(e))
+            self.__open__()
+        return False
+    
+    
 REDIS_CONN = RedisDB()
 
 
@@ -405,33 +344,17 @@ class RedisDistributedLock:
         else:
             self.lock_value = str(uuid.uuid4())
         self.timeout = timeout
-        # 使用线程本地连接
-        redis_client = REDIS_CONN.get_connection()
-        if redis_client:
-            self.lock = Lock(redis_client, lock_key, timeout=timeout, blocking_timeout=blocking_timeout)
-        else:
-            self.lock = None
+        self.lock = Lock(REDIS_CONN.REDIS, lock_key, timeout=timeout, blocking_timeout=blocking_timeout)
 
     def acquire(self):
-        if not self.lock:
-            return False
         REDIS_CONN.delete_if_equal(self.lock_key, self.lock_value)
-        try:
-            return self.lock.acquire(token=self.lock_value)
-        except Exception as e:
-            logging.warning(f"Lock acquire failed: {e}")
-            return False
+        return self.lock.acquire(token=self.lock_value)
 
     async def spin_acquire(self):
-        if not self.lock:
-            return False
         REDIS_CONN.delete_if_equal(self.lock_key, self.lock_value)
         while True:
-            try:
-                if self.lock.acquire(token=self.lock_value):
-                    break
-            except Exception as e:
-                logging.warning(f"Lock spin_acquire failed: {e}")
+            if self.lock.acquire(token=self.lock_value):
+                break
             await trio.sleep(10)
 
     def release(self):

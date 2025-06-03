@@ -4,7 +4,7 @@ import os
 
 # Server socket
 bind = f"{os.environ.get('RAGFLOW_HOST_IP', '0.0.0.0')}:{os.environ.get('RAGFLOW_HOST_PORT', '9380')}"
-backlog = 20480
+backlog = 2048
 
 # Worker processes
 workers = int(os.environ.get('GUNICORN_WORKERS', min(multiprocessing.cpu_count() * 2 + 1, 8)))
@@ -14,7 +14,7 @@ worker_class = 'gevent'
 worker_connections = 1000  # Reduced for gevent as it handles more connections per worker
 timeout = 300
 keepalive = 10
-max_requests = 20000
+max_requests = 1000
 max_requests_jitter = 100
 
 preload_app = True

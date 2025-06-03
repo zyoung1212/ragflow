@@ -65,6 +65,15 @@ def pre_fork(server, worker):
 def post_fork(server, worker):
     """Called just after a worker has been forked."""
     server.log.info("RAGFlow worker spawned (pid: %s)", worker.pid)
+    
+    # 重新初始化InfinityConnection连接池
+    try:
+        from rag.utils.infinity_conn import InfinityConnection
+        infinity_conn = InfinityConnection()
+        infinity_conn.reinit_connection_pool()
+        server.log.info("Successfully reinitialized InfinityConnection in worker %s", worker.pid)
+    except Exception as e:
+        server.log.error("Failed to reinitialize InfinityConnection in worker %s: %s", worker.pid, str(e))
 
 def worker_abort(worker):
     """Called when a worker received the SIGABRT signal."""

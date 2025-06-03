@@ -133,6 +133,9 @@ class InfinityConnection(DocStoreConnection):
             host, port = infinity_uri.split(":")
             infinity_uri = infinity.common.NetworkAddress(host, int(port))
         self.connPool = None
+        self._init_connection_pool(infinity_uri)
+        
+    def _init_connection_pool(self, infinity_uri):
         logger.info(f"Use Infinity {infinity_uri} as the doc engine.")
         for _ in range(24):
             try:
@@ -155,6 +158,20 @@ class InfinityConnection(DocStoreConnection):
             logger.error(msg)
             raise Exception(msg)
         logger.info(f"Infinity {infinity_uri} is healthy.")
+    
+    def reinit_connection_pool(self):
+        """重新初始化连接池，用于Gunicorn fork后在子进程中调用"""
+        infinity_uri = settings.INFINITY["uri"]
+        if ":" in infinity_uri:
+            host, port = infinity_uri.split(":")
+            infinity_uri = infinity.common.NetworkAddress(host, int(port))
+        if self.connPool is not None:
+            try:
+                self.connPool.close()
+            except Exception as e:
+                logger.warning(f"Error closing connection pool: {str(e)}")
+        self._init_connection_pool(infinity_uri)
+        logger.info(f"Reinitialized Infinity connection pool in process {os.getpid()}")
 
     def _migrate_db(self, inf_conn):
         inf_db = inf_conn.create_database(self.dbName, ConflictType.Ignore)

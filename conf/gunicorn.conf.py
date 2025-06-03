@@ -17,8 +17,7 @@ keepalive = 10
 max_requests = 20000
 max_requests_jitter = 100
 
-# Restart workers after this many requests, to help prevent memory leaks
-preload_app = True
+preload_app = False
 
 # Logging
 accesslog = '-'

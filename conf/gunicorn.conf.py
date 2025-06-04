@@ -3,6 +3,8 @@ import multiprocessing
 import os
 from api import settings
 from rag.utils.infinity_conn import InfinityConnection
+from graphrag import search as kg_search
+from rag.nlp import search
 
 # Server socket
 bind = f"{os.environ.get('RAGFLOW_HOST_IP', '0.0.0.0')}:{os.environ.get('RAGFLOW_HOST_PORT', '9380')}"

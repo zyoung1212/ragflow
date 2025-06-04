@@ -11,11 +11,11 @@ workers = int(os.environ.get('GUNICORN_WORKERS', min(multiprocessing.cpu_count()
 worker_class = 'gevent'
 
 # Gevent-specific settings
-worker_connections = 1000  # Reduced for gevent as it handles more connections per worker
-timeout = 300
+worker_connections = 1000
+timeout = 600
 keepalive = 10
 max_requests = 1000
-max_requests_jitter = 100
+max_requests_jitter = 200
 
 preload_app = True
 

@@ -67,7 +67,7 @@ def pre_fork(server, worker):
     server.log.info("RAGFlow worker about to be forked")
 
 def post_fork(server, worker):
-    """Called just after a worker has been forked."""
+    """Called just after a worker has been forked. """
     server.log.info("RAGFlow worker spawned (pid: %s)", worker.pid)
     if os.environ.get("DOC_ENGINE") == "infinity":
         settings.docStoreConn = InfinityConnection()

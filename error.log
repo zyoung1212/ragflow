@@ -1,0 +1,1266 @@
+Starting 1 task executor(s) on host '907a30ae2313'...
+Starting nginx...
+Starting ragflow_server with Gunicorn (Production Mode)...
+Gunicorn config: Workers=4, Host=0.0.0.0, Port=9380, Worker Class=gevent
+Using Gunicorn configuration file...
+[2025-06-04 13:05:18 +0800] [1] [DEBUG] Current configuration:
+  config: /ragflow/conf/gunicorn.conf.py
+  wsgi_app: None
+  bind: ['0.0.0.0:9380']
+  backlog: 20480
+  workers: 4
+  worker_class: gevent
+  threads: 1
+  worker_connections: 1000
+  max_requests: 20000
+  max_requests_jitter: 100
+  timeout: 300
+  graceful_timeout: 30
+  keepalive: 10
+  limit_request_line: 8192
+  limit_request_fields: 200
+  limit_request_field_size: 8190
+  reload: False
+  reload_engine: auto
+  reload_extra_files: []
+  spew: False
+  check_config: False
+  print_config: False
+  preload_app: True
+  sendfile: None
+  reuse_port: False
+  chdir: /ragflow
+  daemon: False
+  raw_env: ['PYTHONPATH=/ragflow/']
+  pidfile: /tmp/ragflow_gunicorn.pid
+  worker_tmp_dir: /dev/shm
+  user: 0
+  group: 0
+  umask: 0
+  initgroups: False
+  tmp_upload_dir: None
+  secure_scheme_headers: {'X-FORWARDED-PROTOCOL': 'ssl', 'X-FORWARDED-PROTO': 'https', 'X-FORWARDED-SSL': 'on'}
+  forwarded_allow_ips: ['127.0.0.1']
+  accesslog: -
+  disable_redirect_access_to_syslog: False
+  access_log_format: %(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s" %(D)s
+  errorlog: -
+  loglevel: debug
+  capture_output: False
+  logger_class: gunicorn.glogging.Logger
+  logconfig: None
+  logconfig_dict: {}
+  logconfig_json: None
+  syslog_addr: udp://localhost:514
+  syslog: False
+  syslog_prefix: None
+  syslog_facility: user
+  enable_stdio_inheritance: False
+  statsd_host: None
+  dogstatsd_tags:
+  statsd_prefix:
+  proc_name: ragflow_gunicorn
+  default_proc_name: api.wsgi:application
+  pythonpath: None
+  paste: None
+  on_starting: <function OnStarting.on_starting at 0x7f677a59e320>
+  on_reload: <function OnReload.on_reload at 0x7f677a59e440>
+  when_ready: <function when_ready at 0x7f6779eb8160>
+  pre_fork: <function pre_fork at 0x7f6779eb8280>
+  post_fork: <function post_fork at 0x7f6779f50940>
+  post_worker_init: <function PostWorkerInit.post_worker_init at 0x7f677a59e8c0>
+  worker_int: <function worker_int at 0x7f6779eb81f0>
+  worker_abort: <function worker_abort at 0x7f6779f509d0>
+  pre_exec: <function PreExec.pre_exec at 0x7f677a59ec20>
+  pre_request: <function PreRequest.pre_request at 0x7f677a59ed40>
+  post_request: <function PostRequest.post_request at 0x7f677a59edd0>
+  child_exit: <function ChildExit.child_exit at 0x7f677a59eef0>
+  worker_exit: <function worker_exit at 0x7f6779f50a60>
+  nworkers_changed: <function NumWorkersChanged.nworkers_changed at 0x7f677a59f130>
+  on_exit: <function OnExit.on_exit at 0x7f677a59f250>
+  ssl_context: <function NewSSLContext.ssl_context at 0x7f677a59f370>
+  proxy_protocol: False
+  proxy_allow_ips: ['127.0.0.1']
+  keyfile: None
+  certfile: None
+  ssl_version: 2
+  cert_reqs: 0
+  ca_certs: None
+  suppress_ragged_eofs: True
+  do_handshake_on_connect: False
+  ciphers: None
+  raw_paste_global_conf: []
+  strip_header_spaces: False
+2025-06-04 13:05:19,926 INFO     1 ragflow_server log path: /ragflow/logs/ragflow_server.log, log levels: {'peewee': 'WARNING', 'pdfminer': 'WARNING', 'root': 'INFO'}
+2025-06-04 13:05:22,372 INFO     1 found 0 gpus
+2025-06-04 13:05:27,159 INFO     1 init database on cluster mode successfully
+2025-06-04 13:05:30,372 INFO     1 load_model /ragflow/rag/res/deepdoc/det.onnx uses CPU
+2025-06-04 13:05:30,445 INFO     1 load_model /ragflow/rag/res/deepdoc/rec.onnx uses CPU
+2025-06-04 13:05:36,935 INFO     1
+        ____   ___    ______ ______ __
+       / __ \ /   |  / ____// ____// /____  _      __
+      / /_/ // /| | / / __ / /_   / // __ \| | /| / /
+     / _, _// ___ |/ /_/ // __/  / // /_/ /| |/ |/ /
+    /_/ |_|/_/  |_|\____//_/    /_/ \____/ |__/|__/
+
+
+2025-06-04 13:05:36,935 INFO     1 RAGFlow version: bab38c24 full
+2025-06-04 13:05:36,935 INFO     1 project base: /ragflow
+2025-06-04 13:05:36,935 INFO     1 Current configs, from /ragflow/conf/service_conf.yaml:
+	ragflow: {'host': '0.0.0.0', 'http_port': 9380}
+	mysql: {'name': 'rag_flow', 'user': 'root', 'password': '********', 'host': 'mysql', 'port': 3306, 'max_connections': 900, 'stale_timeout': 300}
+	minio: {'user': 'rag_flow', 'password': '********', 'host': 'minio:9000'}
+	es: {'hosts': 'http://es01:9200', 'username': 'elastic', 'password': '********'}
+	os: {'hosts': 'http://opensearch01:9201', 'username': 'admin', 'password': '********'}
+	infinity: {'uri': 'infinity:23817', 'db_name': 'default_db'}
+	redis: {'db': 1, 'password': '********', 'host': 'redis:6379'}
+2025-06-04 13:05:36,936 INFO     1 Use Infinity IP: infinity, Port: 23817 as the doc engine.
+2025-06-04 13:05:36,981 INFO     1 Infinity IP: infinity, Port: 23817 is healthy.
+2025-06-04 13:05:36,984 WARNING  1 Load term.freq FAIL!
+2025-06-04 13:05:36,987 WARNING  1 Realtime synonym is disabled, since no redis connection.
+2025-06-04 13:05:36,991 WARNING  1 Load term.freq FAIL!
+2025-06-04 13:05:36,994 WARNING  1 Realtime synonym is disabled, since no redis connection.
+2025-06-04 13:05:36,994 INFO     1 MAX_CONTENT_LENGTH: 134217728
+2025-06-04 13:05:36,994 INFO     1 MAX_FILE_COUNT_PER_USER: 0
+2025-06-04 13:05:39,649 INFO     1 init web data success:0.8482246398925781
+2025-06-04 13:05:39,649 INFO     1 Recursively importing plugins from path `/ragflow/plugin/embedded_plugins`
+2025-06-04 13:05:39,650 INFO     1 Loaded llm_tools plugin BadCalculatorPlugin version 1.0.0
+2025-06-04 13:05:39,651 INFO     1 Started document progress update task in gevent mode
+2025-06-04 13:05:39,651 INFO     1 RAGFlow WSGI application initialized successfully in production mode
+[2025-06-04 13:05:39 +0800] [1] [INFO] Starting gunicorn 21.2.0
+[2025-06-04 13:05:39 +0800] [1] [DEBUG] Arbiter booted
+[2025-06-04 13:05:39 +0800] [1] [INFO] Listening at: http://0.0.0.0:9380 (1)
+[2025-06-04 13:05:39 +0800] [1] [INFO] Using worker: gevent
+[2025-06-04 13:05:39 +0800] [1] [INFO] RAGFlow Gunicor n server is ready. Production mode active.
+[2025-06-04 13:05:39 +0800] [1] [INFO] RAGFlow worker about to be forked
+2025-06-04 13:05:39,670 INFO     1 update_progress lock_value: 196e4be2-cb44-4d29-8fb9-65b95155d94d
+[2025-06-04 13:05:39 +0800] [102] [INFO] Booting worker with pid: 102
+[2025-06-04 13:05:39 +0800] [102] [INFO] RAGFlow worker spawned (pid: 102)
+[2025-06-04 13:05:39 +0800] [102] [ERROR] Failed to reinitialize settings after fork: module 'rag.settings' has no attribute 'init_settings'
+2025-06-04 13:05:39,680 INFO     102 update_progress lock_value: c0eaed6a-1765-4701-86ae-5bbb9d189bb0
+[2025-06-04 13:05:39 +0800] [1] [INFO] RAGFlow worker about to be forked
+[2025-06-04 13:05:39 +0800] [104] [INFO] Booting worker with pid: 104
+[2025-06-04 13:05:39 +0800] [104] [INFO] RAGFlow worker spawned (pid: 104)
+[2025-06-04 13:05:39 +0800] [104] [ERROR] Failed to reinitialize settings after fork: module 'rag.settings' has no attribute 'init_settings'
+[2025-06-04 13:05:39 +0800] [1] [INFO] RAGFlow worker about to be forked
+[2025-06-04 13:05:39 +0800] [105] [INFO] Booting worker with pid: 105
+[2025-06-04 13:05:39 +0800] [105] [INFO] RAGFlow worker spawned (pid: 105)
+[2025-06-04 13:05:39 +0800] [105] [ERROR] Failed to reinitialize settings after fork: module 'rag.settings' has no attribute 'init_settings'
+[2025-06-04 13:05:39 +0800] [1] [INFO] RAGFlow worker about to be forked
+[2025-06-04 13:05:39 +0800] [106] [INFO] Booting worker with pid: 106
+[2025-06-04 13:05:39 +0800] [106] [INFO] RAGFlow worker spawned (pid: 106)
+[2025-06-04 13:05:39 +0800] [106] [ERROR] Failed to reinitialize settings after fork: module 'rag.settings' has no attribute 'init_settings'
+[2025-06-04 13:05:39 +0800] [1] [DEBUG] 4 workers
+[2025-06-04 13:05:43 +0800] [106] [DEBUG] GET /
+2025-06-04 13:05:43,651 ERROR    106 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.10/site-packages/flask/app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/ragflow/.venv/lib/python3.10/site-packages/flask/app.py", line 854, in dispatch_request
+    self.raise_routing_exception(req)
+  File "/ragflow/.venv/lib/python3.10/site-packages/flask/app.py", line 463, in raise_routing_exception
+    raise request.routing_exception  # type: ignore[misc]
+  File "/ragflow/.venv/lib/python3.10/site-packages/flask/ctx.py", line 362, in match_request
+    result = self.url_adapter.match(return_rule=True)  # type: ignore
+  File "/ragflow/.venv/lib/python3.10/site-packages/werkzeug/routing/map.py", line 629, in match
+    raise NotFound() from None
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+172.18.0.1 - - [04/Jun/2025:13:05:43 +0800] "GET / HTTP/1.1" 200 65 "-" "curl/7.81.0" 8320
+[2025-06-04 13:05:43 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:05:44 +0800] [104] [DEBUG] POST /v1/user/register
+172.18.0.1 - - [04/Jun/2025:13:05:44 +0800] "POST /v1/user/register HTTP/1.1" 200 773 "-" "python-requests/2.32.3" 143671
+[2025-06-04 13:05:44 +0800] [104] [DEBUG] Closing connection.
+[2025-06-04 13:05:44 +0800] [102] [DEBUG] POST /v1/user/login
+172.18.0.1 - - [04/Jun/2025:13:05:44 +0800] "POST /v1/user/login HTTP/1.1" 200 769 "-" "python-requests/2.32.3" 132912
+[2025-06-04 13:05:44 +0800] [102] [DEBUG] Closing connection.
+[2025-06-04 13:05:44 +0800] [105] [DEBUG] GET /v1/llm/my_llms
+172.18.0.1 - - [04/Jun/2025:13:05:44 +0800] "GET /v1/llm/my_llms HTTP/1.1" 200 272 "-" "python-requests/2.32.3" 10436
+[2025-06-04 13:05:44 +0800] [105] [DEBUG] Closing connection.
+[2025-06-04 13:05:44 +0800] [105] [DEBUG] POST /v1/llm/set_api_key
+2025-06-04 13:05:45,437 INFO     12 task_executor_907a30ae2313_0 log path: /ragflow/logs/task_executor_907a30ae2313_0.log, log levels: {'peewee': 'WARNING', 'pdfminer': 'WARNING', 'root': 'INFO'}
+2025-06-04 13:05:45,437 INFO     12
+  ______           __      ______                     __
+ /_  __/___ ______/ /__   / ____/  _____  _______  __/ /_____  _____
+  / / / __ `/ ___/ //_/  / __/ | |/_/ _ \/ ___/ / / / __/ __ \/ ___/
+ / / / /_/ (__  ) ,<    / /____>  </  __/ /__/ /_/ / /_/ /_/ / /
+/_/  \__,_/____/_/|_|  /_____/_/|_|\___/\___/\__,_/\__/\____/_/
+
+2025-06-04 13:05:45,437 INFO     12 TaskExecutor: RAGFlow version: bab38c24 full
+2025-06-04 13:05:45,438 INFO     12 Use Infinity IP: infinity, Port: 23817 as the doc engine.
+2025-06-04 13:05:45,475 INFO     12 Infinity IP: infinity, Port: 23817 is healthy.
+2025-06-04 13:05:45,478 WARNING  12 Load term.freq FAIL!
+2025-06-04 13:05:45,481 WARNING  12 Realtime synonym is disabled, since no redis connection.
+2025-06-04 13:05:45,484 WARNING  12 Load term.freq FAIL!
+2025-06-04 13:05:45,487 WARNING  12 Realtime synonym is disabled, since no redis connection.
+2025-06-04 13:05:45,487 INFO     12 MAX_CONTENT_LENGTH: 134217728
+2025-06-04 13:05:45,487 INFO     12 MAX_FILE_COUNT_PER_USER: 0
+2025-06-04 13:05:45,489 WARNING  12 RedisDB.queue_info rag_flow_svr_queue got exception: no such key
+2025-06-04 13:05:45,489 INFO     12 task_executor_907a30ae2313_0 reported heartbeat: {"name": "task_executor_907a30ae2313_0", "now": "2025-06-04T13:05:45.489+08:00", "boot_at": "2025-06-04T13:05:45.436+08:00", "pending": 0, "lag": 0, "done": 0, "failed": 0, "current": {}}
+2025-06-04 13:05:45,490 WARNING  12 RedisDB.get_unacked_iterator queue rag_flow_svr_queue_1 doesn't exist
+2025-06-04 13:05:45,490 WARNING  12 RedisDB.get_unacked_iterator queue rag_flow_svr_queue doesn't exist
+2025-06-04 13:05:45,689 INFO     105 HTTP Request: POST https://open.bigmodel.cn/api/paas/v4/embeddings "HTTP/1.1 429 Too Many Requests"
+2025-06-04 13:05:46,503 INFO     105 HTTP Request: POST https://open.bigmodel.cn/api/paas/v4/embeddings "HTTP/1.1 429 Too Many Requests"
+2025-06-04 13:05:47,388 INFO     105 HTTP Request: POST https://open.bigmodel.cn/api/paas/v4/chat/completions "HTTP/1.1 429 Too Many Requests"
+2025-06-04 13:05:48,342 INFO     105 HTTP Request: POST https://open.bigmodel.cn/api/paas/v4/chat/completions "HTTP/1.1 429 Too Many Requests"
+2025-06-04 13:05:49,266 INFO     105 HTTP Request: POST https://open.bigmodel.cn/api/paas/v4/chat/completions "HTTP/1.1 429 Too Many Requests"
+2025-06-04 13:05:50,026 INFO     105 HTTP Request: POST https://open.bigmodel.cn/api/paas/v4/chat/completions "HTTP/1.1 429 Too Many Requests"
+2025-06-04 13:05:50,786 INFO     105 HTTP Request: POST https://open.bigmodel.cn/api/paas/v4/chat/completions "HTTP/1.1 429 Too Many Requests"
+2025-06-04 13:05:51,725 INFO     105 HTTP Request: POST https://open.bigmodel.cn/api/paas/v4/chat/completions "HTTP/1.1 429 Too Many Requests"
+2025-06-04 13:05:53,419 INFO     105 HTTP Request: POST https://open.bigmodel.cn/api/paas/v4/chat/completions "HTTP/1.1 200 OK"
+172.18.0.1 - - [04/Jun/2025:13:05:53 +0800] "POST /v1/llm/set_api_key HTTP/1.1" 200 43 "-" "python-requests/2.32.3" 8568774
+[2025-06-04 13:05:53 +0800] [105] [DEBUG] Closing connection.
+[2025-06-04 13:05:53 +0800] [105] [DEBUG] GET /v1/user/tenant_info
+172.18.0.1 - - [04/Jun/2025:13:05:53 +0800] "GET /v1/user/tenant_info HTTP/1.1" 200 430 "-" "python-requests/2.32.3" 3558
+[2025-06-04 13:05:53 +0800] [105] [DEBUG] Closing connection.
+[2025-06-04 13:05:53 +0800] [105] [DEBUG] POST /v1/user/set_tenant_info
+172.18.0.1 - - [04/Jun/2025:13:05:53 +0800] "POST /v1/user/set_tenant_info HTTP/1.1" 200 43 "-" "python-requests/2.32.3" 4568
+[2025-06-04 13:05:53 +0800] [105] [DEBUG] Closing connection.
+[2025-06-04 13:05:53 +0800] [104] [DEBUG] POST /v1/user/register
+172.18.0.1 - - [04/Jun/2025:13:05:53 +0800] "POST /v1/user/register HTTP/1.1" 200 84 "-" "python-requests/2.32.3" 2553
+[2025-06-04 13:05:53 +0800] [104] [DEBUG] Closing connection.
+[2025-06-04 13:05:53 +0800] [106] [DEBUG] POST /v1/user/login
+172.18.0.1 - - [04/Jun/2025:13:05:53 +0800] "POST /v1/user/login HTTP/1.1" 200 769 "-" "python-requests/2.32.3" 129145
+[2025-06-04 13:05:53 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:05:53 +0800] [106] [DEBUG] POST /v1/system/new_token
+172.18.0.1 - - [04/Jun/2025:13:05:53 +0800] "POST /v1/system/new_token HTTP/1.1" 200 292 "-" "python-requests/2.32.3" 7861
+[2025-06-04 13:05:53 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:05:53 +0800] [106] [DEBUG] POST /api/v1/datasets
+172.18.0.1 - - [04/Jun/2025:13:05:53 +0800] "POST /api/v1/datasets HTTP/1.1" 200 754 "-" "python-requests/2.32.3" 11893
+[2025-06-04 13:05:53 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:05:53 +0800] [106] [DEBUG] POST /api/v1/datasets
+172.18.0.1 - - [04/Jun/2025:13:05:53 +0800] "POST /api/v1/datasets HTTP/1.1" 200 765 "-" "python-requests/2.32.3" 9929
+[2025-06-04 13:05:53 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:05:53 +0800] [106] [DEBUG] POST /api/v1/datasets
+172.18.0.1 - - [04/Jun/2025:13:05:53 +0800] "POST /api/v1/datasets HTTP/1.1" 200 96 "-" "python-requests/2.32.3" 2618
+[2025-06-04 13:05:53 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:05:53 +0800] [106] [DEBUG] POST /api/v1/datasets
+172.18.0.1 - - [04/Jun/2025:13:05:53 +0800] "POST /api/v1/datasets HTTP/1.1" 200 688 "-" "python-requests/2.32.3" 8995
+[2025-06-04 13:05:53 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:05:53 +0800] [106] [DEBUG] POST /api/v1/datasets
+172.18.0.1 - - [04/Jun/2025:13:05:53 +0800] "POST /api/v1/datasets HTTP/1.1" 200 218 "-" "python-requests/2.32.3" 1639
+[2025-06-04 13:05:53 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:05:53 +0800] [106] [DEBUG] POST /api/v1/datasets
+172.18.0.1 - - [04/Jun/2025:13:05:53 +0800] "POST /api/v1/datasets HTTP/1.1" 200 744 "-" "python-requests/2.32.3" 11922
+[2025-06-04 13:05:53 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:05:53 +0800] [106] [DEBUG] PUT /api/v1/datasets/973fbf58410111f0baa666c716e57a49
+172.18.0.1 - - [04/Jun/2025:13:05:53 +0800] "PUT /api/v1/datasets/973fbf58410111f0baa666c716e57a49 HTTP/1.1" 200 11 "-" "python-requests/2.32.3" 6432
+[2025-06-04 13:05:53 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:05:53 +0800] [106] [DEBUG] POST /api/v1/datasets
+172.18.0.1 - - [04/Jun/2025:13:05:53 +0800] "POST /api/v1/datasets HTTP/1.1" 200 744 "-" "python-requests/2.32.3" 11039
+[2025-06-04 13:05:53 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:05:53 +0800] [102] [DEBUG] DELETE /api/v1/datasets
+172.18.0.1 - - [04/Jun/2025:13:05:53 +0800] "DELETE /api/v1/datasets HTTP/1.1" 200 11 "-" "python-requests/2.32.3" 8322
+[2025-06-04 13:05:53 +0800] [102] [DEBUG] Closing connection.
+[2025-06-04 13:05:53 +0800] [102] [DEBUG] POST /api/v1/datasets
+172.18.0.1 - - [04/Jun/2025:13:05:53 +0800] "POST /api/v1/datasets HTTP/1.1" 200 743 "-" "python-requests/2.32.3" 12160
+[2025-06-04 13:05:53 +0800] [102] [DEBUG] Closing connection.
+[2025-06-04 13:05:53 +0800] [105] [DEBUG] GET /api/v1/datasets
+172.18.0.1 - - [04/Jun/2025:13:05:53 +0800] "GET /api/v1/datasets?page=1&page_size=30&orderby=create_time&desc=True HTTP/1.1" 200 3620 "-" "python-requests/2.32.3" 4600
+[2025-06-04 13:05:53 +0800] [105] [DEBUG] Closing connection.
+[2025-06-04 13:05:53 +0800] [102] [DEBUG] POST /api/v1/datasets
+172.18.0.1 - - [04/Jun/2025:13:05:53 +0800] "POST /api/v1/datasets HTTP/1.1" 200 741 "-" "python-requests/2.32.3" 11017
+[2025-06-04 13:05:53 +0800] [102] [DEBUG] Closing connection.
+[2025-06-04 13:05:53 +0800] [102] [DEBUG] POST /api/v1/datasets/9749abbc410111f08cc766c716e57a49/documents
+172.18.0.1 - - [04/Jun/2025:13:05:53 +0800] "POST /api/v1/datasets/9749abbc410111f08cc766c716e57a49/documents HTTP/1.1" 200 418 "-" "python-requests/2.32.3" 57017
+[2025-06-04 13:05:53 +0800] [102] [DEBUG] Closing connection.
+[2025-06-04 13:05:53 +0800] [105] [DEBUG] POST /api/v1/datasets/9749abbc410111f08cc766c716e57a49/documents/97521798410111f08cc766c716e57a49/chunks
+2025-06-04 13:05:53,885 WARNING  105 /ragflow/.venv/lib/python3.10/site-packages/transformers/utils/generic.py:441: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+
+2025-06-04 13:05:54,143 INFO     105 PyTorch version 2.6.0 available.
+2025-06-04 13:05:55,476 WARNING  105 /ragflow/.venv/lib/python3.10/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+
+2025-06-04 13:05:55,645 WARNING  105 /ragflow/.venv/lib/python3.10/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+
+2025-06-04 13:05:58,202 INFO     105 INFINITY created table ragflow_91e0897a410111f0bf7b66c716e57a49_9749abbc410111f08cc766c716e57a49, vector size 1024
+172.18.0.1 - - [04/Jun/2025:13:05:58 +0800] "POST /api/v1/datasets/9749abbc410111f08cc766c716e57a49/documents/97521798410111f08cc766c716e57a49/chunks HTTP/1.1" 200 302 "-" "python-requests/2.32.3" 4428901
+[2025-06-04 13:05:58 +0800] [105] [DEBUG] Closing connection.
+[2025-06-04 13:05:58 +0800] [106] [DEBUG] POST /api/v1/chats
+172.18.0.1 - - [04/Jun/2025:13:05:58 +0800] "POST /api/v1/chats HTTP/1.1" 200 1359 "-" "python-requests/2.32.3" 11756
+[2025-06-04 13:05:58 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:05:58 +0800] [106] [DEBUG] POST /api/v1/datasets
+172.18.0.1 - - [04/Jun/2025:13:05:58 +0800] "POST /api/v1/datasets HTTP/1.1" 200 741 "-" "python-requests/2.32.3" 9680
+[2025-06-04 13:05:58 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:05:58 +0800] [106] [DEBUG] POST /api/v1/datasets/99fa90d8410111f0baa666c716e57a49/documents
+172.18.0.1 - - [04/Jun/2025:13:05:58 +0800] "POST /api/v1/datasets/99fa90d8410111f0baa666c716e57a49/documents HTTP/1.1" 200 418 "-" "python-requests/2.32.3" 33219
+[2025-06-04 13:05:58 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:05:58 +0800] [106] [DEBUG] POST /api/v1/datasets/99fa90d8410111f0baa666c716e57a49/documents/99ff65b8410111f0baa666c716e57a49/chunks
+2025-06-04 13:05:58,371 WARNING  106 /ragflow/.venv/lib/python3.10/site-packages/transformers/utils/generic.py:441: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+
+2025-06-04 13:05:58,639 INFO     106 PyTorch version 2.6.0 available.
+2025-06-04 13:06:00,058 WARNING  106 /ragflow/.venv/lib/python3.10/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+
+2025-06-04 13:06:00,233 WARNING  106 /ragflow/.venv/lib/python3.10/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+
+2025-06-04 13:06:02,765 INFO     106 INFINITY created table ragflow_91e0897a410111f0bf7b66c716e57a49_99fa90d8410111f0baa666c716e57a49, vector size 1024
+172.18.0.1 - - [04/Jun/2025:13:06:02 +0800] "POST /api/v1/datasets/99fa90d8410111f0baa666c716e57a49/documents/99ff65b8410111f0baa666c716e57a49/chunks HTTP/1.1" 200 303 "-" "python-requests/2.32.3" 4480318
+[2025-06-04 13:06:02 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:06:02 +0800] [106] [DEBUG] POST /api/v1/chats
+172.18.0.1 - - [04/Jun/2025:13:06:02 +0800] "POST /api/v1/chats HTTP/1.1" 200 1359 "-" "python-requests/2.32.3" 11602
+[2025-06-04 13:06:02 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:06:02 +0800] [106] [DEBUG] PUT /api/v1/chats/9cae2902410111f0baa666c716e57a49
+172.18.0.1 - - [04/Jun/2025:13:06:02 +0800] "PUT /api/v1/chats/9cae2902410111f0baa666c716e57a49 HTTP/1.1" 200 11 "-" "python-requests/2.32.3" 8144
+[2025-06-04 13:06:02 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:06:02 +0800] [106] [DEBUG] POST /api/v1/datasets
+172.18.0.1 - - [04/Jun/2025:13:06:02 +0800] "POST /api/v1/datasets HTTP/1.1" 200 741 "-" "python-requests/2.32.3" 9831
+[2025-06-04 13:06:02 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:06:02 +0800] [106] [DEBUG] POST /api/v1/datasets/9cb12a94410111f0baa666c716e57a49/documents
+172.18.0.1 - - [04/Jun/2025:13:06:02 +0800] "POST /api/v1/datasets/9cb12a94410111f0baa666c716e57a49/documents HTTP/1.1" 200 418 "-" "python-requests/2.32.3" 25962
+[2025-06-04 13:06:02 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:06:02 +0800] [105] [DEBUG] POST /api/v1/datasets/9cb12a94410111f0baa666c716e57a49/documents/9cb53b7a410111f0baa666c716e57a49/chunks
+2025-06-04 13:06:02,952 INFO     105 INFINITY created table ragflow_91e0897a410111f0bf7b66c716e57a49_9cb12a94410111f0baa666c716e57a49, vector size 1024
+172.18.0.1 - - [04/Jun/2025:13:06:02 +0800] "POST /api/v1/datasets/9cb12a94410111f0baa666c716e57a49/documents/9cb53b7a410111f0baa666c716e57a49/chunks HTTP/1.1" 200 303 "-" "python-requests/2.32.3" 119947
+[2025-06-04 13:06:02 +0800] [105] [DEBUG] Closing connection.
+[2025-06-04 13:06:02 +0800] [102] [DEBUG] POST /api/v1/chats
+172.18.0.1 - - [04/Jun/2025:13:06:02 +0800] "POST /api/v1/chats HTTP/1.1" 200 1359 "-" "python-requests/2.32.3" 11741
+[2025-06-04 13:06:02 +0800] [102] [DEBUG] Closing connection.
+[2025-06-04 13:06:02 +0800] [106] [DEBUG] DELETE /api/v1/chats
+172.18.0.1 - - [04/Jun/2025:13:06:02 +0800] "DELETE /api/v1/chats HTTP/1.1" 200 11 "-" "python-requests/2.32.3" 5035
+[2025-06-04 13:06:02 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:06:02 +0800] [106] [DEBUG] POST /api/v1/datasets
+172.18.0.1 - - [04/Jun/2025:13:06:02 +0800] "POST /api/v1/datasets HTTP/1.1" 200 740 "-" "python-requests/2.32.3" 9519
+[2025-06-04 13:06:02 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:06:03 +0800] [102] [DEBUG] POST /api/v1/datasets/9cccd0b4410111f0baa666c716e57a49/documents
+172.18.0.1 - - [04/Jun/2025:13:06:03 +0800] "POST /api/v1/datasets/9cccd0b4410111f0baa666c716e57a49/documents HTTP/1.1" 200 418 "-" "python-requests/2.32.3" 24278
+[2025-06-04 13:06:03 +0800] [102] [DEBUG] Closing connection.
+[2025-06-04 13:06:03 +0800] [102] [DEBUG] POST /api/v1/datasets/9cccd0b4410111f0baa666c716e57a49/documents/9cd08862410111f08cc766c716e57a49/chunks
+2025-06-04 13:06:03,091 WARNING  102 /ragflow/.venv/lib/python3.10/site-packages/transformers/utils/generic.py:441: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+
+2025-06-04 13:06:03,341 INFO     102 PyTorch version 2.6.0 available.
+2025-06-04 13:06:04,670 WARNING  102 /ragflow/.venv/lib/python3.10/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+
+2025-06-04 13:06:04,835 WARNING  102 /ragflow/.venv/lib/python3.10/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+
+2025-06-04 13:06:07,620 INFO     102 INFINITY created table ragflow_91e0897a410111f0bf7b66c716e57a49_9cccd0b4410111f0baa666c716e57a49, vector size 1024
+172.18.0.1 - - [04/Jun/2025:13:06:07 +0800] "POST /api/v1/datasets/9cccd0b4410111f0baa666c716e57a49/documents/9cd08862410111f08cc766c716e57a49/chunks HTTP/1.1" 200 303 "-" "python-requests/2.32.3" 4611815
+[2025-06-04 13:06:07 +0800] [102] [DEBUG] Closing connection.
+[2025-06-04 13:06:07 +0800] [102] [DEBUG] POST /api/v1/chats
+172.18.0.1 - - [04/Jun/2025:13:06:07 +0800] "POST /api/v1/chats HTTP/1.1" 200 1354 "-" "python-requests/2.32.3" 13494
+[2025-06-04 13:06:07 +0800] [102] [DEBUG] Closing connection.
+[2025-06-04 13:06:07 +0800] [102] [DEBUG] POST /api/v1/chats
+172.18.0.1 - - [04/Jun/2025:13:06:07 +0800] "POST /api/v1/chats HTTP/1.1" 200 1354 "-" "python-requests/2.32.3" 16673
+[2025-06-04 13:06:07 +0800] [102] [DEBUG] Closing connection.
+[2025-06-04 13:06:07 +0800] [106] [DEBUG] GET /api/v1/chats
+172.18.0.1 - - [04/Jun/2025:13:06:07 +0800] "GET /api/v1/chats?page=1&page_size=30&orderby=create_time&desc=True HTTP/1.1" 200 8080 "-" "python-requests/2.32.3" 8084
+[2025-06-04 13:06:07 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:06:07 +0800] [104] [DEBUG] POST /api/v1/datasets
+172.18.0.1 - - [04/Jun/2025:13:06:07 +0800] "POST /api/v1/datasets HTTP/1.1" 200 744 "-" "python-requests/2.32.3" 12427
+[2025-06-04 13:06:07 +0800] [104] [DEBUG] Closing connection.
+[2025-06-04 13:06:07 +0800] [106] [DEBUG] POST /api/v1/datasets/9f998d00410111f0bf7b66c716e57a49/documents
+172.18.0.1 - - [04/Jun/2025:13:06:07 +0800] "POST /api/v1/datasets/9f998d00410111f0bf7b66c716e57a49/documents HTTP/1.1" 200 418 "-" "python-requests/2.32.3" 26209
+[2025-06-04 13:06:07 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:06:07 +0800] [106] [DEBUG] POST /api/v1/datasets/9f998d00410111f0bf7b66c716e57a49/documents/9f9d9fb2410111f0baa666c716e57a49/chunks
+2025-06-04 13:06:07,834 INFO     106 INFINITY created table ragflow_91e0897a410111f0bf7b66c716e57a49_9f998d00410111f0bf7b66c716e57a49, vector size 1024
+172.18.0.1 - - [04/Jun/2025:13:06:07 +0800] "POST /api/v1/datasets/9f998d00410111f0bf7b66c716e57a49/documents/9f9d9fb2410111f0baa666c716e57a49/chunks HTTP/1.1" 200 303 "-" "python-requests/2.32.3" 122556
+[2025-06-04 13:06:07 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:06:07 +0800] [106] [DEBUG] POST /api/v1/chats
+172.18.0.1 - - [04/Jun/2025:13:06:07 +0800] "POST /api/v1/chats HTTP/1.1" 200 1362 "-" "python-requests/2.32.3" 10154
+[2025-06-04 13:06:07 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:06:07 +0800] [106] [DEBUG] POST /api/v1/chats/9fb31086410111f0baa666c716e57a49/sessions
+172.18.0.1 - - [04/Jun/2025:13:06:07 +0800] "POST /api/v1/chats/9fb31086410111f0baa666c716e57a49/sessions HTTP/1.1" 200 380 "-" "python-requests/2.32.3" 5515
+[2025-06-04 13:06:07 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:06:07 +0800] [105] [DEBUG] POST /api/v1/datasets
+172.18.0.1 - - [04/Jun/2025:13:06:07 +0800] "POST /api/v1/datasets HTTP/1.1" 200 749 "-" "python-requests/2.32.3" 10710
+[2025-06-04 13:06:07 +0800] [105] [DEBUG] Closing connection.
+[2025-06-04 13:06:07 +0800] [105] [DEBUG] POST /api/v1/datasets/9fb5cca4410111f0b22566c716e57a49/documents
+172.18.0.1 - - [04/Jun/2025:13:06:07 +0800] "POST /api/v1/datasets/9fb5cca4410111f0b22566c716e57a49/documents HTTP/1.1" 200 418 "-" "python-requests/2.32.3" 29432
+[2025-06-04 13:06:07 +0800] [105] [DEBUG] Closing connection.
+[2025-06-04 13:06:07 +0800] [104] [DEBUG] POST /api/v1/datasets/9fb5cca4410111f0b22566c716e57a49/documents/9fba1d7c410111f0b22566c716e57a49/chunks
+2025-06-04 13:06:07,979 WARNING  104 /ragflow/.venv/lib/python3.10/site-packages/transformers/utils/generic.py:441: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+
+2025-06-04 13:06:08,228 INFO     104 PyTorch version 2.6.0 available.
+2025-06-04 13:06:09,542 WARNING  104 /ragflow/.venv/lib/python3.10/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+
+2025-06-04 13:06:09,708 WARNING  104 /ragflow/.venv/lib/python3.10/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+
+2025-06-04 13:06:12,249 INFO     104 INFINITY created table ragflow_91e0897a410111f0bf7b66c716e57a49_9fb5cca4410111f0b22566c716e57a49, vector size 1024
+172.18.0.1 - - [04/Jun/2025:13:06:12 +0800] "POST /api/v1/datasets/9fb5cca4410111f0b22566c716e57a49/documents/9fba1d7c410111f0b22566c716e57a49/chunks HTTP/1.1" 200 303 "-" "python-requests/2.32.3" 4353129
+[2025-06-04 13:06:12 +0800] [104] [DEBUG] Closing connection.
+[2025-06-04 13:06:12 +0800] [106] [DEBUG] POST /api/v1/chats
+172.18.0.1 - - [04/Jun/2025:13:06:12 +0800] "POST /api/v1/chats HTTP/1.1" 200 1367 "-" "python-requests/2.32.3" 10547
+[2025-06-04 13:06:12 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:06:12 +0800] [106] [DEBUG] POST /api/v1/chats/a25545c0410111f0baa666c716e57a49/sessions
+172.18.0.1 - - [04/Jun/2025:13:06:12 +0800] "POST /api/v1/chats/a25545c0410111f0baa666c716e57a49/sessions HTTP/1.1" 200 380 "-" "python-requests/2.32.3" 5677
+[2025-06-04 13:06:12 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:06:12 +0800] [106] [DEBUG] POST /api/v1/chats/a25545c0410111f0baa666c716e57a49/completions
+2025-06-04 13:06:13,849 INFO     106 HTTP Request: POST https://open.bigmodel.cn/api/paas/v4/chat/completions "HTTP/1.1 200 OK"
+2025-06-04 13:06:15,491 WARNING  12 RedisDB.queue_info rag_flow_svr_queue got exception: no such key
+2025-06-04 13:06:15,491 INFO     12 task_executor_907a30ae2313_0 reported heartbeat: {"name": "task_executor_907a30ae2313_0", "now": "2025-06-04T13:06:15.491+08:00", "boot_at": "2025-06-04T13:05:45.436+08:00", "pending": 0, "lag": 0, "done": 0, "failed": 0, "current": {}}
+172.18.0.1 - - [04/Jun/2025:13:06:16 +0800] "POST /api/v1/chats/a25545c0410111f0baa666c716e57a49/completions HTTP/1.1" 200 11294 "-" "python-requests/2.32.3" 4547336
+[2025-06-04 13:06:16 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:06:16 +0800] [106] [DEBUG] POST /api/v1/datasets
+172.18.0.1 - - [04/Jun/2025:13:06:16 +0800] "POST /api/v1/datasets HTTP/1.1" 200 744 "-" "python-requests/2.32.3" 10536
+[2025-06-04 13:06:16 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:06:16 +0800] [106] [DEBUG] POST /api/v1/datasets/a50e1d00410111f0baa666c716e57a49/documents
+172.18.0.1 - - [04/Jun/2025:13:06:16 +0800] "POST /api/v1/datasets/a50e1d00410111f0baa666c716e57a49/documents HTTP/1.1" 200 418 "-" "python-requests/2.32.3" 29693
+[2025-06-04 13:06:16 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:06:16 +0800] [102] [DEBUG] POST /api/v1/datasets/a50e1d00410111f0baa666c716e57a49/documents/a512771a410111f0baa666c716e57a49/chunks
+2025-06-04 13:06:17,001 INFO     102 INFINITY created table ragflow_91e0897a410111f0bf7b66c716e57a49_a50e1d00410111f0baa666c716e57a49, vector size 1024
+172.18.0.1 - - [04/Jun/2025:13:06:17 +0800] "POST /api/v1/datasets/a50e1d00410111f0baa666c716e57a49/documents/a512771a410111f0baa666c716e57a49/chunks HTTP/1.1" 200 303 "-" "python-requests/2.32.3" 134332
+[2025-06-04 13:06:17 +0800] [102] [DEBUG] Closing connection.
+[2025-06-04 13:06:17 +0800] [105] [DEBUG] POST /api/v1/chats
+172.18.0.1 - - [04/Jun/2025:13:06:17 +0800] "POST /api/v1/chats HTTP/1.1" 200 1362 "-" "python-requests/2.32.3" 12491
+[2025-06-04 13:06:17 +0800] [105] [DEBUG] Closing connection.
+[2025-06-04 13:06:17 +0800] [105] [DEBUG] POST /api/v1/chats/a52a2630410111f0b22566c716e57a49/sessions
+172.18.0.1 - - [04/Jun/2025:13:06:17 +0800] "POST /api/v1/chats/a52a2630410111f0b22566c716e57a49/sessions HTTP/1.1" 200 380 "-" "python-requests/2.32.3" 5658
+[2025-06-04 13:06:17 +0800] [105] [DEBUG] Closing connection.
+[2025-06-04 13:06:17 +0800] [105] [DEBUG] DELETE /api/v1/chats/a52a2630410111f0b22566c716e57a49/sessions
+172.18.0.1 - - [04/Jun/2025:13:06:17 +0800] "DELETE /api/v1/chats/a52a2630410111f0b22566c716e57a49/sessions HTTP/1.1" 200 11 "-" "python-requests/2.32.3" 6346
+[2025-06-04 13:06:17 +0800] [105] [DEBUG] Closing connection.
+[2025-06-04 13:06:17 +0800] [102] [DEBUG] POST /api/v1/datasets
+172.18.0.1 - - [04/Jun/2025:13:06:17 +0800] "POST /api/v1/datasets HTTP/1.1" 200 744 "-" "python-requests/2.32.3" 10269
+[2025-06-04 13:06:17 +0800] [102] [DEBUG] Closing connection.
+[2025-06-04 13:06:17 +0800] [102] [DEBUG] POST /api/v1/datasets/a52e163c410111f08cc766c716e57a49/documents
+172.18.0.1 - - [04/Jun/2025:13:06:17 +0800] "POST /api/v1/datasets/a52e163c410111f08cc766c716e57a49/documents HTTP/1.1" 200 418 "-" "python-requests/2.32.3" 26885
+[2025-06-04 13:06:17 +0800] [102] [DEBUG] Closing connection.
+[2025-06-04 13:06:17 +0800] [104] [DEBUG] POST /api/v1/datasets/a52e163c410111f08cc766c716e57a49/documents/a532121e410111f08cc766c716e57a49/chunks
+2025-06-04 13:06:17,194 INFO     104 INFINITY created table ragflow_91e0897a410111f0bf7b66c716e57a49_a52e163c410111f08cc766c716e57a49, vector size 1024
+172.18.0.1 - - [04/Jun/2025:13:06:17 +0800] "POST /api/v1/datasets/a52e163c410111f08cc766c716e57a49/documents/a532121e410111f08cc766c716e57a49/chunks HTTP/1.1" 200 303 "-" "python-requests/2.32.3" 120791
+[2025-06-04 13:06:17 +0800] [104] [DEBUG] Closing connection.
+[2025-06-04 13:06:17 +0800] [102] [DEBUG] POST /api/v1/chats
+172.18.0.1 - - [04/Jun/2025:13:06:17 +0800] "POST /api/v1/chats HTTP/1.1" 200 1362 "-" "python-requests/2.32.3" 10276
+[2025-06-04 13:06:17 +0800] [102] [DEBUG] Closing connection.
+[2025-06-04 13:06:17 +0800] [105] [DEBUG] POST /api/v1/chats/a5474954410111f08cc766c716e57a49/sessions
+172.18.0.1 - - [04/Jun/2025:13:06:17 +0800] "POST /api/v1/chats/a5474954410111f08cc766c716e57a49/sessions HTTP/1.1" 200 380 "-" "python-requests/2.32.3" 6005
+[2025-06-04 13:06:17 +0800] [105] [DEBUG] Closing connection.
+[2025-06-04 13:06:17 +0800] [105] [DEBUG] PUT /api/v1/chats/a5474954410111f08cc766c716e57a49/sessions/a548b320410111f0b22566c716e57a49
+172.18.0.1 - - [04/Jun/2025:13:06:17 +0800] "PUT /api/v1/chats/a5474954410111f08cc766c716e57a49/sessions/a548b320410111f0b22566c716e57a49 HTTP/1.1" 200 11 "-" "python-requests/2.32.3" 5672
+[2025-06-04 13:06:17 +0800] [105] [DEBUG] Closing connection.
+[2025-06-04 13:06:17 +0800] [105] [DEBUG] POST /api/v1/datasets
+172.18.0.1 - - [04/Jun/2025:13:06:17 +0800] "POST /api/v1/datasets HTTP/1.1" 200 742 "-" "python-requests/2.32.3" 10377
+[2025-06-04 13:06:17 +0800] [105] [DEBUG] Closing connection.
+[2025-06-04 13:06:17 +0800] [105] [DEBUG] POST /api/v1/datasets/a54b20ba410111f0b22566c716e57a49/documents
+172.18.0.1 - - [04/Jun/2025:13:06:17 +0800] "POST /api/v1/datasets/a54b20ba410111f0b22566c716e57a49/documents HTTP/1.1" 200 418 "-" "python-requests/2.32.3" 27029
+[2025-06-04 13:06:17 +0800] [105] [DEBUG] Closing connection.
+[2025-06-04 13:06:17 +0800] [105] [DEBUG] POST /api/v1/datasets/a54b20ba410111f0b22566c716e57a49/documents/a54f2340410111f0b22566c716e57a49/chunks
+2025-06-04 13:06:17,386 INFO     105 INFINITY created table ragflow_91e0897a410111f0bf7b66c716e57a49_a54b20ba410111f0b22566c716e57a49, vector size 1024
+172.18.0.1 - - [04/Jun/2025:13:06:17 +0800] "POST /api/v1/datasets/a54b20ba410111f0b22566c716e57a49/documents/a54f2340410111f0b22566c716e57a49/chunks HTTP/1.1" 200 303 "-" "python-requests/2.32.3" 122832
+[2025-06-04 13:06:17 +0800] [105] [DEBUG] Closing connection.
+[2025-06-04 13:06:17 +0800] [105] [DEBUG] POST /api/v1/chats
+172.18.0.1 - - [04/Jun/2025:13:06:17 +0800] "POST /api/v1/chats HTTP/1.1" 200 1360 "-" "python-requests/2.32.3" 19602
+[2025-06-04 13:06:17 +0800] [105] [DEBUG] Closing connection.
+[2025-06-04 13:06:17 +0800] [106] [DEBUG] POST /api/v1/chats/a5651f74410111f0b22566c716e57a49/sessions
+172.18.0.1 - - [04/Jun/2025:13:06:17 +0800] "POST /api/v1/chats/a5651f74410111f0b22566c716e57a49/sessions HTTP/1.1" 200 375 "-" "python-requests/2.32.3" 23330
+[2025-06-04 13:06:17 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:06:17 +0800] [106] [DEBUG] POST /api/v1/chats/a5651f74410111f0b22566c716e57a49/sessions
+172.18.0.1 - - [04/Jun/2025:13:06:17 +0800] "POST /api/v1/chats/a5651f74410111f0b22566c716e57a49/sessions HTTP/1.1" 200 375 "-" "python-requests/2.32.3" 6428
+[2025-06-04 13:06:17 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:06:17 +0800] [104] [DEBUG] GET /api/v1/chats/a5651f74410111f0b22566c716e57a49/sessions
+172.18.0.1 - - [04/Jun/2025:13:06:17 +0800] "GET /api/v1/chats/a5651f74410111f0b22566c716e57a49/sessions?page=1&page_size=30&orderby=create_time&desc=True HTTP/1.1" 200 734 "-" "python-requests/2.32.3" 4218
+[2025-06-04 13:06:17 +0800] [104] [DEBUG] Closing connection.
+[2025-06-04 13:06:17 +0800] [104] [DEBUG] POST /api/v1/datasets
+172.18.0.1 - - [04/Jun/2025:13:06:17 +0800] "POST /api/v1/datasets HTTP/1.1" 200 745 "-" "python-requests/2.32.3" 11507
+[2025-06-04 13:06:17 +0800] [104] [DEBUG] Closing connection.
+[2025-06-04 13:06:17 +0800] [105] [DEBUG] POST /api/v1/datasets/a56e0224410111f0bf7b66c716e57a49/documents
+172.18.0.1 - - [04/Jun/2025:13:06:17 +0800] "POST /api/v1/datasets/a56e0224410111f0bf7b66c716e57a49/documents HTTP/1.1" 200 811 "-" "python-requests/2.32.3" 47624
+[2025-06-04 13:06:17 +0800] [105] [DEBUG] Closing connection.
+[2025-06-04 13:06:17 +0800] [104] [DEBUG] POST /api/v1/datasets
+172.18.0.1 - - [04/Jun/2025:13:06:17 +0800] "POST /api/v1/datasets HTTP/1.1" 200 745 "-" "python-requests/2.32.3" 10294
+[2025-06-04 13:06:17 +0800] [104] [DEBUG] Closing connection.
+[2025-06-04 13:06:17 +0800] [104] [DEBUG] POST /api/v1/datasets/a577d8e4410111f0bf7b66c716e57a49/documents
+172.18.0.1 - - [04/Jun/2025:13:06:17 +0800] "POST /api/v1/datasets/a577d8e4410111f0bf7b66c716e57a49/documents HTTP/1.1" 200 411 "-" "python-requests/2.32.3" 57669
+[2025-06-04 13:06:17 +0800] [104] [DEBUG] Closing connection.
+[2025-06-04 13:06:17 +0800] [104] [DEBUG] PUT /api/v1/datasets/a577d8e4410111f0bf7b66c716e57a49/documents/a5805a6e410111f0bf7b66c716e57a49
+172.18.0.1 - - [04/Jun/2025:13:06:17 +0800] "PUT /api/v1/datasets/a577d8e4410111f0bf7b66c716e57a49/documents/a5805a6e410111f0bf7b66c716e57a49 HTTP/1.1" 200 11 "-" "python-requests/2.32.3" 22072
+[2025-06-04 13:06:17 +0800] [104] [DEBUG] Closing connection.
+[2025-06-04 13:06:17 +0800] [106] [DEBUG] POST /api/v1/datasets
+172.18.0.1 - - [04/Jun/2025:13:06:17 +0800] "POST /api/v1/datasets HTTP/1.1" 200 747 "-" "python-requests/2.32.3" 10122
+[2025-06-04 13:06:17 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:06:17 +0800] [102] [DEBUG] POST /api/v1/datasets/a5867566410111f0baa666c716e57a49/documents
+172.18.0.1 - - [04/Jun/2025:13:06:17 +0800] "POST /api/v1/datasets/a5867566410111f0baa666c716e57a49/documents HTTP/1.1" 200 415 "-" "python-requests/2.32.3" 26513
+[2025-06-04 13:06:17 +0800] [102] [DEBUG] Closing connection.
+[2025-06-04 13:06:17 +0800] [104] [DEBUG] GET /api/v1/datasets/a5867566410111f0baa666c716e57a49/documents/a58a47ea410111f08cc766c716e57a49
+172.18.0.1 - - [04/Jun/2025:13:06:17 +0800] "GET /api/v1/datasets/a5867566410111f0baa666c716e57a49/documents/a58a47ea410111f08cc766c716e57a49 HTTP/1.1" 200 33 "-" "python-requests/2.32.3" 10025
+[2025-06-04 13:06:17 +0800] [104] [DEBUG] Closing connection.
+[2025-06-04 13:06:17 +0800] [104] [DEBUG] POST /api/v1/datasets
+172.18.0.1 - - [04/Jun/2025:13:06:17 +0800] "POST /api/v1/datasets HTTP/1.1" 200 744 "-" "python-requests/2.32.3" 11074
+[2025-06-04 13:06:17 +0800] [104] [DEBUG] Closing connection.
+[2025-06-04 13:06:17 +0800] [106] [DEBUG] POST /api/v1/datasets/a58e7464410111f0bf7b66c716e57a49/documents
+172.18.0.1 - - [04/Jun/2025:13:06:17 +0800] "POST /api/v1/datasets/a58e7464410111f0bf7b66c716e57a49/documents HTTP/1.1" 200 411 "-" "python-requests/2.32.3" 26124
+[2025-06-04 13:06:17 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:06:17 +0800] [106] [DEBUG] GET /api/v1/datasets/a58e7464410111f0bf7b66c716e57a49/documents
+172.18.0.1 - - [04/Jun/2025:13:06:17 +0800] "GET /api/v1/datasets/a58e7464410111f0bf7b66c716e57a49/documents?keywords=test&page=1&page_size=12&orderby=create_time&desc=True HTTP/1.1" 200 741 "-" "python-requests/2.32.3" 4824
+[2025-06-04 13:06:17 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:06:17 +0800] [106] [DEBUG] POST /api/v1/datasets
+172.18.0.1 - - [04/Jun/2025:13:06:17 +0800] "POST /api/v1/datasets HTTP/1.1" 200 746 "-" "python-requests/2.32.3" 9822
+[2025-06-04 13:06:17 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:06:17 +0800] [106] [DEBUG] POST /api/v1/datasets/a595b44a410111f0baa666c716e57a49/documents
+172.18.0.1 - - [04/Jun/2025:13:06:17 +0800] "POST /api/v1/datasets/a595b44a410111f0baa666c716e57a49/documents HTTP/1.1" 200 445 "-" "python-requests/2.32.3" 25870
+[2025-06-04 13:06:17 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:06:17 +0800] [105] [DEBUG] DELETE /api/v1/datasets/a595b44a410111f0baa666c716e57a49/documents
+172.18.0.1 - - [04/Jun/2025:13:06:17 +0800] "DELETE /api/v1/datasets/a595b44a410111f0baa666c716e57a49/documents HTTP/1.1" 200 11 "-" "python-requests/2.32.3" 23232
+[2025-06-04 13:06:17 +0800] [105] [DEBUG] Closing connection.
+[2025-06-04 13:06:17 +0800] [106] [DEBUG] POST /api/v1/datasets
+172.18.0.1 - - [04/Jun/2025:13:06:17 +0800] "POST /api/v1/datasets HTTP/1.1" 200 742 "-" "python-requests/2.32.3" 9613
+[2025-06-04 13:06:17 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:06:17 +0800] [106] [DEBUG] POST /api/v1/datasets/a59f8d9e410111f0baa666c716e57a49/documents
+172.18.0.1 - - [04/Jun/2025:13:06:17 +0800] "POST /api/v1/datasets/a59f8d9e410111f0baa666c716e57a49/documents HTTP/1.1" 200 460 "-" "python-requests/2.32.3" 98539
+[2025-06-04 13:06:17 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:06:17 +0800] [106] [DEBUG] POST /api/v1/datasets/a59f8d9e410111f0baa666c716e57a49/chunks
+2025-06-04 13:06:17,909 ERROR    106 (3034, "Session id: 34 isn't found")
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.10/site-packages/flask/app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/ragflow/.venv/lib/python3.10/site-packages/flask/app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/ragflow/api/utils/api_utils.py", line 298, in decorated_function
+    return func(*args, **kwargs)
+  File "/ragflow/api/apps/sdk/doc.py", line 737, in parse
+    settings.docStoreConn.delete({"doc_id": id}, search.index_name(tenant_id), dataset_id)
+  File "/ragflow/rag/utils/infinity_conn.py", line 617, in delete
+    db_instance = inf_conn.get_database(self.dbName)
+  File "/ragflow/.venv/lib/python3.10/site-packages/infinity/remote_thrift/utils.py", line 563, in wrapper
+    return func(*args, **kwargs)
+  File "/ragflow/.venv/lib/python3.10/site-packages/infinity/remote_thrift/infinity.py", line 93, in get_database
+    raise InfinityException(res.error_code, res.error_msg)
+infinity.common.InfinityException: (3034, "Session id: 34 isn't found")
+Exception ignored in: <function RemoteThriftInfinityConnection.__del__ at 0x7f66725a8ca0>
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.10/site-packages/infinity/remote_thrift/infinity.py", line 36, in __del__
+    self.disconnect()
+  File "/ragflow/.venv/lib/python3.10/site-packages/infinity/remote_thrift/infinity.py", line 138, in disconnect
+    raise InfinityException(res.error_code, res.error_msg)
+infinity.common.InfinityException: (3034, "Session id: 34 isn't found")
+172.18.0.1 - - [04/Jun/2025:13:06:17 +0800] "POST /api/v1/datasets/a59f8d9e410111f0baa666c716e57a49/chunks HTTP/1.1" 200 66 "-" "python-requests/2.32.3" 7732
+[2025-06-04 13:06:17 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:06:17 +0800] [105] [DEBUG] POST /api/v1/datasets
+172.18.0.1 - - [04/Jun/2025:13:06:17 +0800] "POST /api/v1/datasets HTTP/1.1" 200 743 "-" "python-requests/2.32.3" 10001
+[2025-06-04 13:06:17 +0800] [105] [DEBUG] Closing connection.
+[2025-06-04 13:06:17 +0800] [102] [DEBUG] POST /api/v1/datasets/a5b88df8410111f0b22566c716e57a49/documents
+172.18.0.1 - - [04/Jun/2025:13:06:17 +0800] "POST /api/v1/datasets/a5b88df8410111f0b22566c716e57a49/documents HTTP/1.1" 200 416 "-" "python-requests/2.32.3" 28203
+[2025-06-04 13:06:17 +0800] [102] [DEBUG] Closing connection.
+[2025-06-04 13:06:17 +0800] [105] [DEBUG] POST /api/v1/datasets/a5b88df8410111f0b22566c716e57a49/chunks
+2025-06-04 13:06:18,003 WARNING  105 Skipped deleting from table ragflow_91e0897a410111f0bf7b66c716e57a49_a5b88df8410111f0b22566c716e57a49 since the table doesn't exist.
+172.18.0.1 - - [04/Jun/2025:13:06:18 +0800] "POST /api/v1/datasets/a5b88df8410111f0b22566c716e57a49/chunks HTTP/1.1" 200 11 "-" "python-requests/2.32.3" 21745
+[2025-06-04 13:06:18 +0800] [105] [DEBUG] Closing connection.
+[2025-06-04 13:06:18 +0800] [104] [DEBUG] POST /api/v1/datasets
+172.18.0.1 - - [04/Jun/2025:13:06:18 +0800] "POST /api/v1/datasets HTTP/1.1" 200 744 "-" "python-requests/2.32.3" 10564
+[2025-06-04 13:06:18 +0800] [104] [DEBUG] Closing connection.
+[2025-06-04 13:06:18 +0800] [104] [DEBUG] POST /api/v1/datasets/a5c293c0410111f0bf7b66c716e57a49/documents
+172.18.0.1 - - [04/Jun/2025:13:06:18 +0800] "POST /api/v1/datasets/a5c293c0410111f0bf7b66c716e57a49/documents HTTP/1.1" 200 416 "-" "python-requests/2.32.3" 25674
+[2025-06-04 13:06:18 +0800] [104] [DEBUG] Closing connection.
+[2025-06-04 13:06:18 +0800] [104] [DEBUG] POST /api/v1/datasets/a5c293c0410111f0bf7b66c716e57a49/chunks
+2025-06-04 13:06:18,067 ERROR    104 (3034, "Session id: 34 isn't found")
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.10/site-packages/flask/app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/ragflow/.venv/lib/python3.10/site-packages/flask/app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/ragflow/api/utils/api_utils.py", line 298, in decorated_function
+    return func(*args, **kwargs)
+  File "/ragflow/api/apps/sdk/doc.py", line 737, in parse
+    settings.docStoreConn.delete({"doc_id": id}, search.index_name(tenant_id), dataset_id)
+  File "/ragflow/rag/utils/infinity_conn.py", line 617, in delete
+    db_instance = inf_conn.get_database(self.dbName)
+  File "/ragflow/.venv/lib/python3.10/site-packages/infinity/remote_thrift/utils.py", line 563, in wrapper
+    return func(*args, **kwargs)
+  File "/ragflow/.venv/lib/python3.10/site-packages/infinity/remote_thrift/infinity.py", line 93, in get_database
+    raise InfinityException(res.error_code, res.error_msg)
+infinity.common.InfinityException: (3034, "Session id: 34 isn't found")
+Exception ignored in: <function RemoteThriftInfinityConnection.__del__ at 0x7f66725a8ca0>
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.10/site-packages/infinity/remote_thrift/infinity.py", line 36, in __del__
+    self.disconnect()
+  File "/ragflow/.venv/lib/python3.10/site-packages/infinity/remote_thrift/infinity.py", line 138, in disconnect
+    raise InfinityException(res.error_code, res.error_msg)
+infinity.common.InfinityException: (3034, "Session id: 34 isn't found")
+172.18.0.1 - - [04/Jun/2025:13:06:18 +0800] "POST /api/v1/datasets/a5c293c0410111f0bf7b66c716e57a49/chunks HTTP/1.1" 200 66 "-" "python-requests/2.32.3" 7816
+[2025-06-04 13:06:18 +0800] [104] [DEBUG] Closing connection.
+[2025-06-04 13:06:18 +0800] [106] [DEBUG] POST /api/v1/datasets
+172.18.0.1 - - [04/Jun/2025:13:06:18 +0800] "POST /api/v1/datasets HTTP/1.1" 200 742 "-" "python-requests/2.32.3" 10022
+[2025-06-04 13:06:18 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:06:18 +0800] [104] [DEBUG] POST /api/v1/datasets/a5caccb6410111f0baa666c716e57a49/documents
+172.18.0.1 - - [04/Jun/2025:13:06:19 +0800] "POST /api/v1/datasets/a5caccb6410111f0baa666c716e57a49/documents HTTP/1.1" 200 467 "-" "python-requests/2.32.3" 1113496
+[2025-06-04 13:06:19 +0800] [104] [DEBUG] Closing connection.
+[2025-06-04 13:06:19 +0800] [102] [DEBUG] POST /api/v1/datasets/a5caccb6410111f0baa666c716e57a49/chunks
+2025-06-04 13:06:19,209 ERROR    102 (3034, "Session id: 34 isn't found")
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.10/site-packages/flask/app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/ragflow/.venv/lib/python3.10/site-packages/flask/app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/ragflow/api/utils/api_utils.py", line 298, in decorated_function
+    return func(*args, **kwargs)
+  File "/ragflow/api/apps/sdk/doc.py", line 737, in parse
+    settings.docStoreConn.delete({"doc_id": id}, search.index_name(tenant_id), dataset_id)
+  File "/ragflow/rag/utils/infinity_conn.py", line 617, in delete
+    db_instance = inf_conn.get_database(self.dbName)
+  File "/ragflow/.venv/lib/python3.10/site-packages/infinity/remote_thrift/utils.py", line 563, in wrapper
+    return func(*args, **kwargs)
+  File "/ragflow/.venv/lib/python3.10/site-packages/infinity/remote_thrift/infinity.py", line 93, in get_database
+    raise InfinityException(res.error_code, res.error_msg)
+infinity.common.InfinityException: (3034, "Session id: 34 isn't found")
+Exception ignored in: <function RemoteThriftInfinityConnection.__del__ at 0x7f66725a8ca0>
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.10/site-packages/infinity/remote_thrift/infinity.py", line 36, in __del__
+    self.disconnect()
+  File "/ragflow/.venv/lib/python3.10/site-packages/infinity/remote_thrift/infinity.py", line 138, in disconnect
+    raise InfinityException(res.error_code, res.error_msg)
+infinity.common.InfinityException: (3034, "Session id: 34 isn't found")
+172.18.0.1 - - [04/Jun/2025:13:06:19 +0800] "POST /api/v1/datasets/a5caccb6410111f0baa666c716e57a49/chunks HTTP/1.1" 200 66 "-" "python-requests/2.32.3" 8266
+[2025-06-04 13:06:19 +0800] [102] [DEBUG] Closing connection.
+[2025-06-04 13:06:19 +0800] [106] [DEBUG] POST /api/v1/datasets
+172.18.0.1 - - [04/Jun/2025:13:06:19 +0800] "POST /api/v1/datasets HTTP/1.1" 200 744 "-" "python-requests/2.32.3" 10756
+[2025-06-04 13:06:19 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:06:19 +0800] [105] [DEBUG] POST /api/v1/datasets/a67a7760410111f0baa666c716e57a49/documents
+172.18.0.1 - - [04/Jun/2025:13:06:19 +0800] "POST /api/v1/datasets/a67a7760410111f0baa666c716e57a49/documents HTTP/1.1" 200 465 "-" "python-requests/2.32.3" 61911
+[2025-06-04 13:06:19 +0800] [105] [DEBUG] Closing connection.
+[2025-06-04 13:06:19 +0800] [106] [DEBUG] POST /api/v1/datasets/a67a7760410111f0baa666c716e57a49/chunks
+2025-06-04 13:06:19,309 ERROR    106 (3034, "Session id: 33 isn't found")
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.10/site-packages/flask/app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/ragflow/.venv/lib/python3.10/site-packages/flask/app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/ragflow/api/utils/api_utils.py", line 298, in decorated_function
+    return func(*args, **kwargs)
+  File "/ragflow/api/apps/sdk/doc.py", line 737, in parse
+    settings.docStoreConn.delete({"doc_id": id}, search.index_name(tenant_id), dataset_id)
+  File "/ragflow/rag/utils/infinity_conn.py", line 617, in delete
+    db_instance = inf_conn.get_database(self.dbName)
+  File "/ragflow/.venv/lib/python3.10/site-packages/infinity/remote_thrift/utils.py", line 563, in wrapper
+    return func(*args, **kwargs)
+  File "/ragflow/.venv/lib/python3.10/site-packages/infinity/remote_thrift/infinity.py", line 93, in get_database
+    raise InfinityException(res.error_code, res.error_msg)
+infinity.common.InfinityException: (3034, "Session id: 33 isn't found")
+Exception ignored in: <function RemoteThriftInfinityConnection.__del__ at 0x7f66725a8ca0>
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.10/site-packages/infinity/remote_thrift/infinity.py", line 36, in __del__
+    self.disconnect()
+  File "/ragflow/.venv/lib/python3.10/site-packages/infinity/remote_thrift/infinity.py", line 138, in disconnect
+    raise InfinityException(res.error_code, res.error_msg)
+infinity.common.InfinityException: (3034, "Session id: 33 isn't found")
+172.18.0.1 - - [04/Jun/2025:13:06:19 +0800] "POST /api/v1/datasets/a67a7760410111f0baa666c716e57a49/chunks HTTP/1.1" 200 66 "-" "python-requests/2.32.3" 7177
+[2025-06-04 13:06:19 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:06:19 +0800] [105] [DEBUG] POST /api/v1/datasets
+172.18.0.1 - - [04/Jun/2025:13:06:19 +0800] "POST /api/v1/datasets HTTP/1.1" 200 742 "-" "python-requests/2.32.3" 9881
+[2025-06-04 13:06:19 +0800] [105] [DEBUG] Closing connection.
+[2025-06-04 13:06:19 +0800] [105] [DEBUG] POST /api/v1/datasets/a68831ac410111f0b22566c716e57a49/documents
+172.18.0.1 - - [04/Jun/2025:13:06:19 +0800] "POST /api/v1/datasets/a68831ac410111f0b22566c716e57a49/documents HTTP/1.1" 200 413 "-" "python-requests/2.32.3" 23400
+[2025-06-04 13:06:19 +0800] [105] [DEBUG] Closing connection.
+[2025-06-04 13:06:19 +0800] [105] [DEBUG] POST /api/v1/datasets/a68831ac410111f0b22566c716e57a49/chunks
+2025-06-04 13:06:19,359 WARNING  105 Skipped deleting from table ragflow_91e0897a410111f0bf7b66c716e57a49_a68831ac410111f0b22566c716e57a49 since the table doesn't exist.
+172.18.0.1 - - [04/Jun/2025:13:06:19 +0800] "POST /api/v1/datasets/a68831ac410111f0b22566c716e57a49/chunks HTTP/1.1" 200 11 "-" "python-requests/2.32.3" 19638
+[2025-06-04 13:06:19 +0800] [105] [DEBUG] Closing connection.
+[2025-06-04 13:06:19 +0800] [106] [DEBUG] POST /api/v1/datasets
+172.18.0.1 - - [04/Jun/2025:13:06:19 +0800] "POST /api/v1/datasets HTTP/1.1" 200 741 "-" "python-requests/2.32.3" 10088
+[2025-06-04 13:06:19 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:06:19 +0800] [102] [DEBUG] POST /api/v1/datasets/a6911eca410111f0baa666c716e57a49/documents
+172.18.0.1 - - [04/Jun/2025:13:06:19 +0800] "POST /api/v1/datasets/a6911eca410111f0baa666c716e57a49/documents HTTP/1.1" 200 411 "-" "python-requests/2.32.3" 27777
+[2025-06-04 13:06:19 +0800] [102] [DEBUG] Closing connection.
+[2025-06-04 13:06:19 +0800] [105] [DEBUG] POST /api/v1/datasets/a6911eca410111f0baa666c716e57a49/chunks
+2025-06-04 13:06:19,422 WARNING  105 Skipped deleting from table ragflow_91e0897a410111f0bf7b66c716e57a49_a6911eca410111f0baa666c716e57a49 since the table doesn't exist.
+172.18.0.1 - - [04/Jun/2025:13:06:19 +0800] "POST /api/v1/datasets/a6911eca410111f0baa666c716e57a49/chunks HTTP/1.1" 200 11 "-" "python-requests/2.32.3" 19536
+[2025-06-04 13:06:19 +0800] [105] [DEBUG] Closing connection.
+[2025-06-04 13:06:19 +0800] [105] [DEBUG] POST /api/v1/datasets
+172.18.0.1 - - [04/Jun/2025:13:06:19 +0800] "POST /api/v1/datasets HTTP/1.1" 200 743 "-" "python-requests/2.32.3" 9859
+[2025-06-04 13:06:19 +0800] [105] [DEBUG] Closing connection.
+[2025-06-04 13:06:19 +0800] [105] [DEBUG] POST /api/v1/datasets/a69aae9a410111f0b22566c716e57a49/documents
+172.18.0.1 - - [04/Jun/2025:13:06:19 +0800] "POST /api/v1/datasets/a69aae9a410111f0b22566c716e57a49/documents HTTP/1.1" 200 415 "-" "python-requests/2.32.3" 25953
+[2025-06-04 13:06:19 +0800] [105] [DEBUG] Closing connection.
+[2025-06-04 13:06:19 +0800] [102] [DEBUG] POST /api/v1/datasets/a69aae9a410111f0b22566c716e57a49/chunks
+2025-06-04 13:06:19,483 ERROR    102 (3034, "Session id: 33 isn't found")
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.10/site-packages/flask/app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/ragflow/.venv/lib/python3.10/site-packages/flask/app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/ragflow/api/utils/api_utils.py", line 298, in decorated_function
+    return func(*args, **kwargs)
+  File "/ragflow/api/apps/sdk/doc.py", line 737, in parse
+    settings.docStoreConn.delete({"doc_id": id}, search.index_name(tenant_id), dataset_id)
+  File "/ragflow/rag/utils/infinity_conn.py", line 617, in delete
+    db_instance = inf_conn.get_database(self.dbName)
+  File "/ragflow/.venv/lib/python3.10/site-packages/infinity/remote_thrift/utils.py", line 563, in wrapper
+    return func(*args, **kwargs)
+  File "/ragflow/.venv/lib/python3.10/site-packages/infinity/remote_thrift/infinity.py", line 93, in get_database
+    raise InfinityException(res.error_code, res.error_msg)
+infinity.common.InfinityException: (3034, "Session id: 33 isn't found")
+Exception ignored in: <function RemoteThriftInfinityConnection.__del__ at 0x7f66725a8ca0>
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.10/site-packages/infinity/remote_thrift/infinity.py", line 36, in __del__
+    self.disconnect()
+  File "/ragflow/.venv/lib/python3.10/site-packages/infinity/remote_thrift/infinity.py", line 138, in disconnect
+    raise InfinityException(res.error_code, res.error_msg)
+infinity.common.InfinityException: (3034, "Session id: 33 isn't found")
+172.18.0.1 - - [04/Jun/2025:13:06:19 +0800] "POST /api/v1/datasets/a69aae9a410111f0b22566c716e57a49/chunks HTTP/1.1" 200 66 "-" "python-requests/2.32.3" 7079
+[2025-06-04 13:06:19 +0800] [102] [DEBUG] Closing connection.
+[2025-06-04 13:06:19 +0800] [102] [DEBUG] POST /api/v1/datasets
+172.18.0.1 - - [04/Jun/2025:13:06:19 +0800] "POST /api/v1/datasets HTTP/1.1" 200 743 "-" "python-requests/2.32.3" 10994
+[2025-06-04 13:06:19 +0800] [102] [DEBUG] Closing connection.
+[2025-06-04 13:06:19 +0800] [105] [DEBUG] POST /api/v1/datasets/a6a2f384410111f08cc766c716e57a49/documents
+172.18.0.1 - - [04/Jun/2025:13:06:19 +0800] "POST /api/v1/datasets/a6a2f384410111f08cc766c716e57a49/documents HTTP/1.1" 200 416 "-" "python-requests/2.32.3" 27374
+[2025-06-04 13:06:19 +0800] [105] [DEBUG] Closing connection.
+[2025-06-04 13:06:19 +0800] [106] [DEBUG] POST /api/v1/datasets/a6a2f384410111f08cc766c716e57a49/chunks
+2025-06-04 13:06:19,539 ERROR    106 (3034, "Session id: 32 isn't found")
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.10/site-packages/flask/app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/ragflow/.venv/lib/python3.10/site-packages/flask/app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/ragflow/api/utils/api_utils.py", line 298, in decorated_function
+    return func(*args, **kwargs)
+  File "/ragflow/api/apps/sdk/doc.py", line 737, in parse
+    settings.docStoreConn.delete({"doc_id": id}, search.index_name(tenant_id), dataset_id)
+  File "/ragflow/rag/utils/infinity_conn.py", line 617, in delete
+    db_instance = inf_conn.get_database(self.dbName)
+  File "/ragflow/.venv/lib/python3.10/site-packages/infinity/remote_thrift/utils.py", line 563, in wrapper
+    return func(*args, **kwargs)
+  File "/ragflow/.venv/lib/python3.10/site-packages/infinity/remote_thrift/infinity.py", line 93, in get_database
+    raise InfinityException(res.error_code, res.error_msg)
+infinity.common.InfinityException: (3034, "Session id: 32 isn't found")
+Exception ignored in: <function RemoteThriftInfinityConnection.__del__ at 0x7f66725a8ca0>
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.10/site-packages/infinity/remote_thrift/infinity.py", line 36, in __del__
+    self.disconnect()
+  File "/ragflow/.venv/lib/python3.10/site-packages/infinity/remote_thrift/infinity.py", line 138, in disconnect
+    raise InfinityException(res.error_code, res.error_msg)
+infinity.common.InfinityException: (3034, "Session id: 32 isn't found")
+172.18.0.1 - - [04/Jun/2025:13:06:19 +0800] "POST /api/v1/datasets/a6a2f384410111f08cc766c716e57a49/chunks HTTP/1.1" 200 66 "-" "python-requests/2.32.3" 6865
+[2025-06-04 13:06:19 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:06:19 +0800] [105] [DEBUG] POST /api/v1/datasets
+172.18.0.1 - - [04/Jun/2025:13:06:19 +0800] "POST /api/v1/datasets HTTP/1.1" 200 744 "-" "python-requests/2.32.3" 10231
+[2025-06-04 13:06:19 +0800] [105] [DEBUG] Closing connection.
+[2025-06-04 13:06:19 +0800] [105] [DEBUG] POST /api/v1/datasets/a6ab5128410111f0b22566c716e57a49/documents
+172.18.0.1 - - [04/Jun/2025:13:06:19 +0800] "POST /api/v1/datasets/a6ab5128410111f0b22566c716e57a49/documents HTTP/1.1" 200 429 "-" "python-requests/2.32.3" 26636
+[2025-06-04 13:06:19 +0800] [105] [DEBUG] Closing connection.
+[2025-06-04 13:06:19 +0800] [105] [DEBUG] POST /api/v1/datasets/a6ab5128410111f0b22566c716e57a49/chunks
+2025-06-04 13:06:19,592 WARNING  105 Skipped deleting from table ragflow_91e0897a410111f0bf7b66c716e57a49_a6ab5128410111f0b22566c716e57a49 since the table doesn't exist.
+172.18.0.1 - - [04/Jun/2025:13:06:19 +0800] "POST /api/v1/datasets/a6ab5128410111f0b22566c716e57a49/chunks HTTP/1.1" 200 11 "-" "python-requests/2.32.3" 19991
+[2025-06-04 13:06:19 +0800] [105] [DEBUG] Closing connection.
+[2025-06-04 13:06:19 +0800] [105] [DEBUG] POST /api/v1/datasets
+172.18.0.1 - - [04/Jun/2025:13:06:19 +0800] "POST /api/v1/datasets HTTP/1.1" 200 755 "-" "python-requests/2.32.3" 9705
+[2025-06-04 13:06:19 +0800] [105] [DEBUG] Closing connection.
+[2025-06-04 13:06:19 +0800] [102] [DEBUG] POST /api/v1/datasets/a6b4c5a0410111f0b22566c716e57a49/documents
+172.18.0.1 - - [04/Jun/2025:13:06:19 +0800] "POST /api/v1/datasets/a6b4c5a0410111f0b22566c716e57a49/documents HTTP/1.1" 200 429 "-" "python-requests/2.32.3" 25766
+[2025-06-04 13:06:19 +0800] [102] [DEBUG] Closing connection.
+[2025-06-04 13:06:19 +0800] [102] [DEBUG] POST /api/v1/datasets/a6b4c5a0410111f0b22566c716e57a49/chunks
+2025-06-04 13:06:19,652 ERROR    102 (3034, "Session id: 32 isn't found")
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.10/site-packages/flask/app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/ragflow/.venv/lib/python3.10/site-packages/flask/app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/ragflow/api/utils/api_utils.py", line 298, in decorated_function
+    return func(*args, **kwargs)
+  File "/ragflow/api/apps/sdk/doc.py", line 737, in parse
+    settings.docStoreConn.delete({"doc_id": id}, search.index_name(tenant_id), dataset_id)
+  File "/ragflow/rag/utils/infinity_conn.py", line 617, in delete
+    db_instance = inf_conn.get_database(self.dbName)
+  File "/ragflow/.venv/lib/python3.10/site-packages/infinity/remote_thrift/utils.py", line 563, in wrapper
+    return func(*args, **kwargs)
+  File "/ragflow/.venv/lib/python3.10/site-packages/infinity/remote_thrift/infinity.py", line 93, in get_database
+    raise InfinityException(res.error_code, res.error_msg)
+infinity.common.InfinityException: (3034, "Session id: 32 isn't found")
+Exception ignored in: <function RemoteThriftInfinityConnection.__del__ at 0x7f66725a8ca0>
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.10/site-packages/infinity/remote_thrift/infinity.py", line 36, in __del__
+    self.disconnect()
+  File "/ragflow/.venv/lib/python3.10/site-packages/infinity/remote_thrift/infinity.py", line 138, in disconnect
+    raise InfinityException(res.error_code, res.error_msg)
+infinity.common.InfinityException: (3034, "Session id: 32 isn't found")
+172.18.0.1 - - [04/Jun/2025:13:06:19 +0800] "POST /api/v1/datasets/a6b4c5a0410111f0b22566c716e57a49/chunks HTTP/1.1" 200 66 "-" "python-requests/2.32.3" 6413
+[2025-06-04 13:06:19 +0800] [102] [DEBUG] Closing connection.
+[2025-06-04 13:06:19 +0800] [102] [DEBUG] POST /api/v1/datasets
+172.18.0.1 - - [04/Jun/2025:13:06:19 +0800] "POST /api/v1/datasets HTTP/1.1" 200 761 "-" "python-requests/2.32.3" 10594
+[2025-06-04 13:06:19 +0800] [102] [DEBUG] Closing connection.
+[2025-06-04 13:06:19 +0800] [102] [DEBUG] POST /api/v1/datasets/a6bca036410111f08cc766c716e57a49/documents
+172.18.0.1 - - [04/Jun/2025:13:06:19 +0800] "POST /api/v1/datasets/a6bca036410111f08cc766c716e57a49/documents HTTP/1.1" 200 1202 "-" "python-requests/2.32.3" 52714
+[2025-06-04 13:06:19 +0800] [102] [DEBUG] Closing connection.
+[2025-06-04 13:06:19 +0800] [105] [DEBUG] POST /api/v1/datasets/a6bca036410111f08cc766c716e57a49/chunks
+2025-06-04 13:06:19,733 WARNING  105 Skipped deleting from table ragflow_91e0897a410111f0bf7b66c716e57a49_a6bca036410111f08cc766c716e57a49 since the table doesn't exist.
+2025-06-04 13:06:19,750 WARNING  105 Skipped deleting from table ragflow_91e0897a410111f0bf7b66c716e57a49_a6bca036410111f08cc766c716e57a49 since the table doesn't exist.
+2025-06-04 13:06:19,767 WARNING  105 Skipped deleting from table ragflow_91e0897a410111f0bf7b66c716e57a49_a6bca036410111f08cc766c716e57a49 since the table doesn't exist.
+172.18.0.1 - - [04/Jun/2025:13:06:19 +0800] "POST /api/v1/datasets/a6bca036410111f08cc766c716e57a49/chunks HTTP/1.1" 200 11 "-" "python-requests/2.32.3" 54593
+[2025-06-04 13:06:19 +0800] [105] [DEBUG] Closing connection.
+[2025-06-04 13:06:19 +0800] [105] [DEBUG] POST /api/v1/datasets
+172.18.0.1 - - [04/Jun/2025:13:06:19 +0800] "POST /api/v1/datasets HTTP/1.1" 200 754 "-" "python-requests/2.32.3" 9555
+[2025-06-04 13:06:19 +0800] [105] [DEBUG] Closing connection.
+[2025-06-04 13:06:19 +0800] [105] [DEBUG] POST /api/v1/datasets/a6cf7b48410111f0b22566c716e57a49/documents
+172.18.0.1 - - [04/Jun/2025:13:06:19 +0800] "POST /api/v1/datasets/a6cf7b48410111f0b22566c716e57a49/documents HTTP/1.1" 200 463 "-" "python-requests/2.32.3" 25958
+[2025-06-04 13:06:19 +0800] [105] [DEBUG] Closing connection.
+[2025-06-04 13:06:19 +0800] [105] [DEBUG] POST /api/v1/datasets/a6cf7b48410111f0b22566c716e57a49/chunks
+2025-06-04 13:06:19,828 WARNING  105 Skipped deleting from table ragflow_91e0897a410111f0bf7b66c716e57a49_a6cf7b48410111f0b22566c716e57a49 since the table doesn't exist.
+172.18.0.1 - - [04/Jun/2025:13:06:19 +0800] "POST /api/v1/datasets/a6cf7b48410111f0b22566c716e57a49/chunks HTTP/1.1" 200 11 "-" "python-requests/2.32.3" 19228
+[2025-06-04 13:06:19 +0800] [105] [DEBUG] Closing connection.
+[2025-06-04 13:06:19 +0800] [105] [DEBUG] GET /api/v1/datasets/a6cf7b48410111f0b22566c716e57a49/documents/a6d35312410111f0b22566c716e57a49/chunks
+2025-06-04 13:06:19,848 WARNING  105 INFINITY indexExist (3022, "Table ragflow_91e0897a410111f0bf7b66c716e57a49_a6cf7b48410111f0b22566c716e57a49 doesn't exist@src/main/query_context.cpp:226")
+172.18.0.1 - - [04/Jun/2025:13:06:19 +0800] "GET /api/v1/datasets/a6cf7b48410111f0b22566c716e57a49/documents/a6d35312410111f0b22566c716e57a49/chunks?keywords=&page=1&page_size=30&id= HTTP/1.1" 200 853 "-" "python-requests/2.32.3" 4519
+[2025-06-04 13:06:19 +0800] [105] [DEBUG] Closing connection.
+[2025-06-04 13:06:19 +0800] [105] [DEBUG] POST /api/v1/datasets
+172.18.0.1 - - [04/Jun/2025:13:06:19 +0800] "POST /api/v1/datasets HTTP/1.1" 200 752 "-" "python-requests/2.32.3" 9735
+[2025-06-04 13:06:19 +0800] [105] [DEBUG] Closing connection.
+[2025-06-04 13:06:19 +0800] [105] [DEBUG] POST /api/v1/datasets/a6d9b43c410111f0b22566c716e57a49/documents
+172.18.0.1 - - [04/Jun/2025:13:06:19 +0800] "POST /api/v1/datasets/a6d9b43c410111f0b22566c716e57a49/documents HTTP/1.1" 200 463 "-" "python-requests/2.32.3" 26422
+[2025-06-04 13:06:19 +0800] [105] [DEBUG] Closing connection.
+[2025-06-04 13:06:19 +0800] [106] [DEBUG] POST /api/v1/datasets/a6d9b43c410111f0b22566c716e57a49/documents/a6dd978c410111f0b22566c716e57a49/chunks
+2025-06-04 13:06:19,996 ERROR    106 (3034, "Session id: 31 isn't found")
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.10/site-packages/flask/app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/ragflow/.venv/lib/python3.10/site-packages/flask/app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/ragflow/api/utils/api_utils.py", line 298, in decorated_function
+    return func(*args, **kwargs)
+  File "/ragflow/api/apps/sdk/doc.py", line 1117, in add_chunk
+    settings.docStoreConn.insert([d], search.index_name(tenant_id), dataset_id)
+  File "/ragflow/rag/utils/infinity_conn.py", line 468, in insert
+    db_instance = inf_conn.get_database(self.dbName)
+  File "/ragflow/.venv/lib/python3.10/site-packages/infinity/remote_thrift/utils.py", line 563, in wrapper
+    return func(*args, **kwargs)
+  File "/ragflow/.venv/lib/python3.10/site-packages/infinity/remote_thrift/infinity.py", line 93, in get_database
+    raise InfinityException(res.error_code, res.error_msg)
+infinity.common.InfinityException: (3034, "Session id: 31 isn't found")
+Exception ignored in: <function RemoteThriftInfinityConnection.__del__ at 0x7f66725a8ca0>
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.10/site-packages/infinity/remote_thrift/infinity.py", line 36, in __del__
+    self.disconnect()
+  File "/ragflow/.venv/lib/python3.10/site-packages/infinity/remote_thrift/infinity.py", line 138, in disconnect
+    raise InfinityException(res.error_code, res.error_msg)
+infinity.common.InfinityException: (3034, "Session id: 31 isn't found")
+172.18.0.1 - - [04/Jun/2025:13:06:19 +0800] "POST /api/v1/datasets/a6d9b43c410111f0b22566c716e57a49/documents/a6dd978c410111f0b22566c716e57a49/chunks HTTP/1.1" 200 66 "-" "python-requests/2.32.3" 106645
+[2025-06-04 13:06:19 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:06:20 +0800] [106] [DEBUG] POST /api/v1/datasets
+172.18.0.1 - - [04/Jun/2025:13:06:20 +0800] "POST /api/v1/datasets HTTP/1.1" 200 755 "-" "python-requests/2.32.3" 9879
+[2025-06-04 13:06:20 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:06:20 +0800] [106] [DEBUG] POST /api/v1/datasets/a6f1169a410111f0baa666c716e57a49/documents
+172.18.0.1 - - [04/Jun/2025:13:06:20 +0800] "POST /api/v1/datasets/a6f1169a410111f0baa666c716e57a49/documents HTTP/1.1" 200 465 "-" "python-requests/2.32.3" 25054
+[2025-06-04 13:06:20 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:06:20 +0800] [104] [DEBUG] POST /api/v1/datasets/a6f1169a410111f0baa666c716e57a49/documents/a6f4ef18410111f0baa666c716e57a49/chunks
+2025-06-04 13:06:20,147 ERROR    104 (3034, "Session id: 33 isn't found")
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.10/site-packages/flask/app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/ragflow/.venv/lib/python3.10/site-packages/flask/app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/ragflow/api/utils/api_utils.py", line 298, in decorated_function
+    return func(*args, **kwargs)
+  File "/ragflow/api/apps/sdk/doc.py", line 1117, in add_chunk
+    settings.docStoreConn.insert([d], search.index_name(tenant_id), dataset_id)
+  File "/ragflow/rag/utils/infinity_conn.py", line 468, in insert
+    db_instance = inf_conn.get_database(self.dbName)
+  File "/ragflow/.venv/lib/python3.10/site-packages/infinity/remote_thrift/utils.py", line 563, in wrapper
+    return func(*args, **kwargs)
+  File "/ragflow/.venv/lib/python3.10/site-packages/infinity/remote_thrift/infinity.py", line 93, in get_database
+    raise InfinityException(res.error_code, res.error_msg)
+infinity.common.InfinityException: (3034, "Session id: 33 isn't found")
+Exception ignored in: <function RemoteThriftInfinityConnection.__del__ at 0x7f66725a8ca0>
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.10/site-packages/infinity/remote_thrift/infinity.py", line 36, in __del__
+    self.disconnect()
+  File "/ragflow/.venv/lib/python3.10/site-packages/infinity/remote_thrift/infinity.py", line 138, in disconnect
+    raise InfinityException(res.error_code, res.error_msg)
+infinity.common.InfinityException: (3034, "Session id: 33 isn't found")
+172.18.0.1 - - [04/Jun/2025:13:06:20 +0800] "POST /api/v1/datasets/a6f1169a410111f0baa666c716e57a49/documents/a6f4ef18410111f0baa666c716e57a49/chunks HTTP/1.1" 200 66 "-" "python-requests/2.32.3" 105550
+[2025-06-04 13:06:20 +0800] [104] [DEBUG] Closing connection.
+[2025-06-04 13:06:20 +0800] [106] [DEBUG] POST /api/v1/datasets
+172.18.0.1 - - [04/Jun/2025:13:06:20 +0800] "POST /api/v1/datasets HTTP/1.1" 200 763 "-" "python-requests/2.32.3" 10555
+[2025-06-04 13:06:20 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:06:20 +0800] [106] [DEBUG] POST /api/v1/datasets/a7082c72410111f0baa666c716e57a49/documents
+172.18.0.1 - - [04/Jun/2025:13:06:20 +0800] "POST /api/v1/datasets/a7082c72410111f0baa666c716e57a49/documents HTTP/1.1" 200 481 "-" "python-requests/2.32.3" 26734
+[2025-06-04 13:06:20 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:06:20 +0800] [102] [DEBUG] POST /api/v1/datasets/a7082c72410111f0baa666c716e57a49/documents/a70c438e410111f0baa666c716e57a49/chunks
+2025-06-04 13:06:20,305 ERROR    102 (3034, "Session id: 31 isn't found")
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.10/site-packages/flask/app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/ragflow/.venv/lib/python3.10/site-packages/flask/app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/ragflow/api/utils/api_utils.py", line 298, in decorated_function
+    return func(*args, **kwargs)
+  File "/ragflow/api/apps/sdk/doc.py", line 1117, in add_chunk
+    settings.docStoreConn.insert([d], search.index_name(tenant_id), dataset_id)
+  File "/ragflow/rag/utils/infinity_conn.py", line 468, in insert
+    db_instance = inf_conn.get_database(self.dbName)
+  File "/ragflow/.venv/lib/python3.10/site-packages/infinity/remote_thrift/utils.py", line 563, in wrapper
+    return func(*args, **kwargs)
+  File "/ragflow/.venv/lib/python3.10/site-packages/infinity/remote_thrift/infinity.py", line 93, in get_database
+    raise InfinityException(res.error_code, res.error_msg)
+infinity.common.InfinityException: (3034, "Session id: 31 isn't found")
+Exception ignored in: <function RemoteThriftInfinityConnection.__del__ at 0x7f66725a8ca0>
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.10/site-packages/infinity/remote_thrift/infinity.py", line 36, in __del__
+    self.disconnect()
+  File "/ragflow/.venv/lib/python3.10/site-packages/infinity/remote_thrift/infinity.py", line 138, in disconnect
+    raise InfinityException(res.error_code, res.error_msg)
+infinity.common.InfinityException: (3034, "Session id: 31 isn't found")
+172.18.0.1 - - [04/Jun/2025:13:06:20 +0800] "POST /api/v1/datasets/a7082c72410111f0baa666c716e57a49/documents/a70c438e410111f0baa666c716e57a49/chunks HTTP/1.1" 200 66 "-" "python-requests/2.32.3" 110717
+[2025-06-04 13:06:20 +0800] [102] [DEBUG] Closing connection.
+[2025-06-04 13:06:20 +0800] [106] [DEBUG] POST /api/v1/datasets
+172.18.0.1 - - [04/Jun/2025:13:06:20 +0800] "POST /api/v1/datasets HTTP/1.1" 200 765 "-" "python-requests/2.32.3" 9765
+[2025-06-04 13:06:20 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:06:20 +0800] [105] [DEBUG] POST /api/v1/datasets/a7205a36410111f0baa666c716e57a49/documents
+172.18.0.1 - - [04/Jun/2025:13:06:20 +0800] "POST /api/v1/datasets/a7205a36410111f0baa666c716e57a49/documents HTTP/1.1" 200 485 "-" "python-requests/2.32.3" 26391
+[2025-06-04 13:06:20 +0800] [105] [DEBUG] Closing connection.
+[2025-06-04 13:06:20 +0800] [105] [DEBUG] POST /api/v1/datasets/a7205a36410111f0baa666c716e57a49/documents/a72447ae410111f0b22566c716e57a49/chunks
+2025-06-04 13:06:20,477 INFO     105 INFINITY created table ragflow_91e0897a410111f0bf7b66c716e57a49_a7205a36410111f0baa666c716e57a49, vector size 1024
+172.18.0.1 - - [04/Jun/2025:13:06:20 +0800] "POST /api/v1/datasets/a7205a36410111f0baa666c716e57a49/documents/a72447ae410111f0b22566c716e57a49/chunks HTTP/1.1" 200 304 "-" "python-requests/2.32.3" 139860
+[2025-06-04 13:06:20 +0800] [105] [DEBUG] Closing connection.
+2025-06-04 13:06:20,509 INFO     12 handle_task begin for task {"id": "a5c00aba410111f0b22566c716e57a49", "doc_id": "a5bcaabe410111f08cc766c716e57a49", "from_page": 0, "to_page": 100000000, "retry_count": 0, "kb_id": "a5b88df8410111f0b22566c716e57a49", "parser_id": "naive", "parser_config": {"chunk_token_num": 128, "delimiter": "\\n", "html4excel": false, "layout_recognize": "DeepDOC", "raptor": {"use_raptor": false}}, "name": "test.docx", "type": "doc", "location": "test.docx", "size": 19146, "tenant_id": "91e0897a410111f0bf7b66c716e57a49", "language": "English", "embd_id": "BAAI/bge-large-zh-v1.5@BAAI", "pagerank": 0, "kb_parser_config": {"chunk_token_num": 128, "delimiter": "\\n", "html4excel": false, "layout_recognize": "DeepDOC", "raptor": {"use_raptor": false}}, "img2txt_id": "glm-4v@ZHIPU-AI", "asr_id": "", "llm_id": "glm-4-flash@ZHIPU-AI", "update_time": 1749013578013, "task_type": ""}
+2025-06-04 13:06:20,558 WARNING  12 /ragflow/.venv/lib/python3.10/site-packages/transformers/utils/generic.py:441: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+
+2025-06-04 13:06:20,803 INFO     12 PyTorch version 2.6.0 available.
+2025-06-04 13:06:22,103 WARNING  12 /ragflow/.venv/lib/python3.10/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+
+2025-06-04 13:06:22,270 WARNING  12 /ragflow/.venv/lib/python3.10/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+
+[2025-06-04 13:06:23 +0800] [105] [DEBUG] PUT /api/v1/datasets/a7205a36410111f0baa666c716e57a49/documents/a72447ae410111f0b22566c716e57a49/chunks/1a20e76b0d1800cf
+172.18.0.1 - - [04/Jun/2025:13:06:23 +0800] "PUT /api/v1/datasets/a7205a36410111f0baa666c716e57a49/documents/a72447ae410111f0b22566c716e57a49/chunks/1a20e76b0d1800cf HTTP/1.1" 200 11 "-" "python-requests/2.32.3" 187870
+[2025-06-04 13:06:23 +0800] [105] [DEBUG] Closing connection.
+[2025-06-04 13:06:23 +0800] [106] [DEBUG] POST /api/v1/datasets
+172.18.0.1 - - [04/Jun/2025:13:06:23 +0800] "POST /api/v1/datasets HTTP/1.1" 200 734 "-" "python-requests/2.32.3" 9844
+[2025-06-04 13:06:23 +0800] [106] [DEBUG] Closing connection.
+[2025-06-04 13:06:23 +0800] [104] [DEBUG] POST /api/v1/datasets/a9232f3e410111f0baa666c716e57a49/documents
+172.18.0.1 - - [04/Jun/2025:13:06:23 +0800] "POST /api/v1/datasets/a9232f3e410111f0baa666c716e57a49/documents HTTP/1.1" 200 445 "-" "python-requests/2.32.3" 27576
+[2025-06-04 13:06:23 +0800] [104] [DEBUG] Closing connection.
+[2025-06-04 13:06:23 +0800] [102] [DEBUG] POST /api/v1/datasets/a9232f3e410111f0baa666c716e57a49/documents/a927597e410111f0bf7b66c716e57a49/chunks
+2025-06-04 13:06:23,831 ERROR    102 (3034, "Session id: 30 isn't found")
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.10/site-packages/flask/app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/ragflow/.venv/lib/python3.10/site-packages/flask/app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/ragflow/api/utils/api_utils.py", line 298, in decorated_function
+    return func(*args, **kwargs)
+  File "/ragflow/api/apps/sdk/doc.py", line 1117, in add_chunk
+    settings.docStoreConn.insert([d], search.index_name(tenant_id), dataset_id)
+  File "/ragflow/rag/utils/infinity_conn.py", line 468, in insert
+    db_instance = inf_conn.get_database(self.dbName)
+  File "/ragflow/.venv/lib/python3.10/site-packages/infinity/remote_thrift/utils.py", line 563, in wrapper
+    return func(*args, **kwargs)
+  File "/ragflow/.venv/lib/python3.10/site-packages/infinity/remote_thrift/infinity.py", line 93, in get_database
+    raise InfinityException(res.error_code, res.error_msg)
+infinity.common.InfinityException: (3034, "Session id: 30 isn't found")
+Exception ignored in: <function RemoteThriftInfinityConnection.__del__ at 0x7f66725a8ca0>
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.10/site-packages/infinity/remote_thrift/infinity.py", line 36, in __del__
+    self.disconnect()
+  File "/ragflow/.venv/lib/python3.10/site-packages/infinity/remote_thrift/infinity.py", line 138, in disconnect
+    raise InfinityException(res.error_code, res.error_msg)
+infinity.common.InfinityException: (3034, "Session id: 30 isn't found")
+172.18.0.1 - - [04/Jun/2025:13:06:23 +0800] "POST /api/v1/datasets/a9232f3e410111f0baa666c716e57a49/documents/a927597e410111f0bf7b66c716e57a49/chunks HTTP/1.1" 200 66 "-" "python-requests/2.32.3" 103875
+[2025-06-04 13:06:23 +0800] [102] [DEBUG] Closing connection.
+[2025-06-04 13:06:24 +0800] [1] [INFO] Handling signal: term
+[2025-06-04 13:06:24 +0800] [105] [INFO] Worker exiting (pid: 105)
+[2025-06-04 13:06:24 +0800] [105] [INFO] RAGFlow worker exiting (pid: 105)
+[2025-06-04 13:06:24 +0800] [1] [ERROR] Worker (pid:104) exited with code 143
+[2025-06-04 13:06:24 +0800] [1] [ERROR] Worker (pid:104) exited with code 143.
+[2025-06-04 13:06:24 +0800] [102] [INFO] Worker exiting (pid: 102)
+[2025-06-04 13:06:24 +0800] [102] [INFO] RAGFlow worker exiting (pid: 102)
+2025-06-04 13:06:24,554 INFO     12 INFINITY created table ragflow_91e0897a410111f0bf7b66c716e57a49_a5b88df8410111f0b22566c716e57a49, vector size 1024
+2025-06-04 13:06:24,561 ERROR    12 RedisDB.queue_consumer rag_flow_svr_queue_1 got exception: Error -2 connecting to redis:6379. Name or service not known.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 194, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/connection.py", line 1116, in get_connection
+    if connection.can_read() and connection.client_cache is None:
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/connection.py", line 524, in can_read
+    return self._parser.can_read(timeout)
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/_parsers/base.py", line 128, in can_read
+    return self._buffer and self._buffer.can_read(timeout)
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/_parsers/socket.py", line 95, in can_read
+    return bool(self.unread_bytes()) or self._read_from_socket(
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/_parsers/socket.py", line 68, in _read_from_socket
+    raise ConnectionError(SERVER_CLOSED_CONNECTION_ERROR)
+valkey.exceptions.ConnectionError: Connection closed by server.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/connection.py", line 696, in _connect
+    for res in socket.getaddrinfo(
+  File "/usr/lib/python3.10/socket.py", line 955, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+socket.gaierror: [Errno -2] Name or service not known
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 228, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/connection.py", line 1120, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error -2 connecting to redis:6379. Name or service not known.
+2025-06-04 13:06:24,566 ERROR    12 RedisDB.queue_consumer rag_flow_svr_queue got exception: Error -2 connecting to redis:6379. Name or service not known.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 194, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/connection.py", line 696, in _connect
+    for res in socket.getaddrinfo(
+  File "/usr/lib/python3.10/socket.py", line 955, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+socket.gaierror: [Errno -2] Name or service not known
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 228, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error -2 connecting to redis:6379. Name or service not known.
+2025-06-04 13:06:24,567 ERROR    12 RedisDB.queue_consumer rag_flow_svr_queue_1 got exception: Error -2 connecting to redis:6379. Name or service not known.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 194, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/connection.py", line 696, in _connect
+    for res in socket.getaddrinfo(
+  File "/usr/lib/python3.10/socket.py", line 955, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+socket.gaierror: [Errno -2] Name or service not known
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 228, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error -2 connecting to redis:6379. Name or service not known.
+2025-06-04 13:06:24,569 ERROR    12 RedisDB.queue_consumer rag_flow_svr_queue got exception: Error -2 connecting to redis:6379. Name or service not known.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 194, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/connection.py", line 696, in _connect
+    for res in socket.getaddrinfo(
+  File "/usr/lib/python3.10/socket.py", line 955, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+socket.gaierror: [Errno -2] Name or service not known
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 228, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error -2 connecting to redis:6379. Name or service not known.
+2025-06-04 13:06:24,570 ERROR    12 RedisDB.queue_consumer rag_flow_svr_queue_1 got exception: Error -2 connecting to redis:6379. Name or service not known.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 194, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/connection.py", line 696, in _connect
+    for res in socket.getaddrinfo(
+  File "/usr/lib/python3.10/socket.py", line 955, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+socket.gaierror: [Errno -2] Name or service not known
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 228, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error -2 connecting to redis:6379. Name or service not known.
+2025-06-04 13:06:24,571 ERROR    12 RedisDB.queue_consumer rag_flow_svr_queue got exception: Error -2 connecting to redis:6379. Name or service not known.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 194, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/connection.py", line 696, in _connect
+    for res in socket.getaddrinfo(
+  File "/usr/lib/python3.10/socket.py", line 955, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+socket.gaierror: [Errno -2] Name or service not known
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 228, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error -2 connecting to redis:6379. Name or service not known.
+2025-06-04 13:06:24,572 ERROR    12 RedisDB.queue_consumer rag_flow_svr_queue_1 got exception: Error -2 connecting to redis:6379. Name or service not known.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 194, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/connection.py", line 696, in _connect
+    for res in socket.getaddrinfo(
+  File "/usr/lib/python3.10/socket.py", line 955, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+socket.gaierror: [Errno -2] Name or service not known
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 228, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error -2 connecting to redis:6379. Name or service not known.
+2025-06-04 13:06:24,573 ERROR    12 RedisDB.queue_consumer rag_flow_svr_queue got exception: Error -2 connecting to redis:6379. Name or service not known.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 194, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/connection.py", line 696, in _connect
+    for res in socket.getaddrinfo(
+  File "/usr/lib/python3.10/socket.py", line 955, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+socket.gaierror: [Errno -2] Name or service not known
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 228, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.10/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error -2 connecting to redis:6379. Name or service not known.
+2025-06-04 13:06:24,579 WARNING  12 Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NameResolutionError("<urllib3.connection.HTTPConnection object at 0x7f8c32fb1420>: Failed to resolve 'minio' ([Errno -2] Name or service not known)")': /a5b88df8410111f0b22566c716e57a49?location=
+[2025-06-04 13:06:24 +0800] [106] [INFO] Worker exiting (pid: 106)
+[2025-06-04 13:06:24 +0800] [106] [INFO] RAGFlow worker exiting (pid: 106)
+2025-06-04 13:06:24,982 WARNING  12 Retrying (Retry(total=3, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NameResolutionError("<urllib3.connection.HTTPConnection object at 0x7f8c32fb2650>: Failed to resolve 'minio' ([Errno -2] Name or service not known)")': /a5b88df8410111f0b22566c716e57a49?location=
+2025-06-04 13:06:25,791 WARNING  12 Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NameResolutionError("<urllib3.connection.HTTPConnection object at 0x7f8c32fb1150>: Failed to resolve 'minio' ([Errno -2] Name or service not known)")': /a5b88df8410111f0b22566c716e57a49?location=
+[2025-06-04 13:06:27 +0800] [1] [INFO] Shutting down: Master
+2025-06-04 13:06:27,394 WARNING  12 Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NameResolutionError("<urllib3.connection.HTTPConnection object at 0x7f8c32fb14e0>: Failed to resolve 'minio' ([Errno -2] Name or service not known)")': /a5b88df8410111f0b22566c716e57a49?location=

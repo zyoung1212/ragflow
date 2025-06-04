@@ -211,7 +211,6 @@ if [[ "${ENABLE_WEBSERVER}" -eq 1 ]]; then
                        --max-requests-jitter 100 \
                        --timeout ${GUNICORN_TIMEOUT} \
                        --keep-alive 2 \
-                       --preload \
                        --bind ${RAGFLOW_HOST}:${RAGFLOW_PORT} \
                        --access-logfile - \
                        --error-logfile - \

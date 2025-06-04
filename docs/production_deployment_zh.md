@@ -48,7 +48,7 @@ pip install -r requirements.txt
 gunicorn --config conf/gunicorn.conf.py api.wsgi:application
 
 # 或者使用命令行参数
-gunicorn --workers 4 --bind 0.0.0.0:9380 --preload api.wsgi:application
+gunicorn --workers 4 --bind 0.0.0.0:9380 api.wsgi:application
 ```
 
 ### 方式二：使用配置文件
@@ -76,7 +76,8 @@ python api/ragflow_server.py
 - `worker_class`: 同步工作模式
 - `timeout`: 120秒超时
 - `max_requests`: 1000请求后重启worker
-- `preload_app`: 预加载应用提升性能
+- `preload_app`: 预加载应用可提升性能，但若 `DOC_ENGINE` 设为 `infinity` 且
+  Gunicorn `workers` 大于 1，需关闭此项以避免会话失效问题
 
 ### 性能调优
 

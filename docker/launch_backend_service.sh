@@ -98,7 +98,7 @@ run_server(){
     # Defaults are provided if they are not set.
     gunicorn --workers ${GUNICORN_WORKERS:-4} \
              --bind ${RAGFLOW_HOST_IP:-0.0.0.0}:${RAGFLOW_HOST_PORT:-9380} \
-             --preload 'api.apps:app'
+             'api.apps:app'
     EXIT_CODE=$?
     if [ $EXIT_CODE -ne 0 ]; then
         echo "Gunicorn failed with exit code $EXIT_CODE. Exiting..." >&2

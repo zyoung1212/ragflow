@@ -17,7 +17,7 @@ keepalive = 10
 max_requests = 20000
 max_requests_jitter = 100
 
-preload_app = True
+preload_app = False
 
 # Logging
 accesslog = "-"
@@ -91,9 +91,11 @@ def post_fork(server, worker):
                         except Exception as exc:  # pragma: no cover - best effort cleanup
                             worker.log.warning("Failed to close connection pool: %s", exc)
 
-        settings.docStoreConn = __import__("rag.utils.infinity_conn", fromlist=["InfinityConnection"]).InfinityConnection()
+        # Initialize settings again so retrievalers use the new connection
+        if os.environ.get("DOC_ENGINE", settings.DOC_ENGINE).lower() == "infinity":
+            settings.init_settings()
     except Exception as exc:  # pragma: no cover - unexpected errors
-        worker.log.error("Failed to reinitialize InfinityConnection: %s", exc)
+        worker.log.error("Failed to reinitialize settings after fork: %s", exc)
 
 
 def worker_abort(worker):
@@ -124,5 +126,7 @@ def worker_exit(server, worker):
                         except Exception as exc:  # pragma: no cover - best effort cleanup
                             worker.log.warning("Failed to close connection pool: %s", exc)
             settings.docStoreConn = None
+            settings.retrievaler = None
+            settings.kg_retrievaler = None
     except Exception as exc:  # pragma: no cover - unexpected errors
         worker.log.error("Cleanup on worker exit failed: %s", exc)

@@ -1,6 +1,8 @@
 # Gunicorn configuration file for RAGFlow production deployment
 import multiprocessing
 import os
+from api import settings
+from rag.utils.infinity_conn import InfinityConnection
 
 # Server socket
 bind = f"{os.environ.get('RAGFLOW_HOST_IP', '0.0.0.0')}:{os.environ.get('RAGFLOW_HOST_PORT', '9380')}"
@@ -65,6 +67,10 @@ def pre_fork(server, worker):
 def post_fork(server, worker):
     """Called just after a worker has been forked."""
     server.log.info("RAGFlow worker spawned (pid: %s)", worker.pid)
+    if settings.DOC_ENGINE.lower() == "infinity":
+        settings.docStoreConn = InfinityConnection()
+        settings.retrievaler = search.Dealer(settings.docStoreConn)
+        settings.kg_retrievaler = kg_search.KGSearch(settings.docStoreConn)
 
 def worker_abort(worker):
     """Called when a worker received the SIGABRT signal."""

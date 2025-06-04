@@ -273,6 +273,8 @@ RAGFlow 默认使用 Elasticsearch 存储文本和向量数据. 如果要切换�
    $ docker compose -f docker-compose.yml up -d
    ```
 
+> **注意**：在使用 Gunicorn 且文档引擎为 Infinity 时，需要在 `post_fork` 阶段为每个 worker 重新初始化连接池。`conf/gunicorn.conf.py` 已包含该逻辑。
+
 > [!WARNING]
 > Infinity 目前官方并未正式支持在 Linux/arm64 架构下的机器上运行.
 

@@ -279,6 +279,8 @@ RAGFlow uses Elasticsearch by default for storing full text and vectors. To swit
    $ docker compose -f docker-compose.yml up -d
    ```
 
+> **Note** When running RAGFlow with Gunicorn and Infinity, each worker must reinitialize its connection pool. The provided `conf/gunicorn.conf.py` handles this in `post_fork`.
+
 > [!WARNING]
 > Switching to Infinity on a Linux/arm64 machine is not yet officially supported.
 
@@ -346,7 +348,7 @@ docker build --platform linux/amd64 -f Dockerfile -t infiniflow/ragflow:nightly 
    # centos
    sudo yum install jemalloc
    ```
-   
+
 6. Launch backend service:
 
    ```bash

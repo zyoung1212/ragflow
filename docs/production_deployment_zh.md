@@ -77,6 +77,7 @@ python api/ragflow_server.py
 - `timeout`: 120秒超时
 - `max_requests`: 1000请求后重启worker
 - `preload_app`: 预加载应用提升性能
+- 如果使用 Infinity 作为文档引擎，需在 `post_fork` 阶段为每个 worker 重新初始化 `InfinityConnection` 连接池，`conf/gunicorn.conf.py` 已实现此逻辑
 
 ### 性能调优
 
@@ -118,7 +119,7 @@ A: 设置环境变量 `GUNICORN_WORKERS` 或修改配置文件中的 `workers` �
 
 ### Q: 开发模式和生产模式的区别？
 
-A: 
+A:
 - 开发模式：使用Werkzeug开发服务器，单进程，有调试功能
 - 生产模式：使用Gunicorn WSGI服务器，多进程，优化性能和稳定性
 
@@ -150,4 +151,4 @@ A: 直接运行 `python api/ragflow_server.py`，但不推荐在生产环境使�
 3. 优化数据库连接
 4. 监控网络延迟
 
-更多问题请参考项目文档或提交Issue。 
+更多问题请参考项目文档或提交Issue。

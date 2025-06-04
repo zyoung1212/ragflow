@@ -416,6 +416,7 @@ class DataBaseModel(BaseModel):
         database = DB
 
 
+@DB.lock("init_database_tables", 60)
 @DB.connection_context()
 def init_database_tables(alter_fields=[]):
     members = inspect.getmembers(sys.modules[__name__], inspect.isclass)
@@ -428,7 +429,7 @@ def init_database_tables(alter_fields=[]):
             if not obj.table_exists():
                 logging.debug(f"start create table {obj.__name__}")
                 try:
-                    obj.create_table()
+                    obj.create_table(safe=True)
                     logging.debug(f"create table success: {obj.__name__}")
                 except Exception as e:
                     logging.exception(e)

@@ -69,7 +69,7 @@ def pre_fork(server, worker):
 def post_fork(server, worker):
     """Called just after a worker has been forked."""
     server.log.info("RAGFlow worker spawned (pid: %s)", worker.pid)
-    if settings.DOC_ENGINE.lower() == "infinity":
+    if os.environ.get("DOC_ENGINE") == "infinity":
         settings.docStoreConn = InfinityConnection()
         settings.retrievaler = search.Dealer(settings.docStoreConn)
         settings.kg_retrievaler = kg_search.KGSearch(settings.docStoreConn)

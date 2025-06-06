@@ -20,7 +20,7 @@ import pytest
 import requests
 
 HOST_ADDRESS = os.getenv("HOST_ADDRESS", "http://127.0.0.1:9380")
-ZHIPU_AI_API_KEY = os.getenv("ZHIPU_AI_API_KEY", "ca148e43209c40109e2bc2f56281dd11.BltyA2N1B043B7Ra")
+ZHIPU_AI_API_KEY = os.getenv("ZHIPU_AI_API_KEY", "ce216ca406744a7fb5973a7d56747295.SuibWxkNyepUKNhX")
 if ZHIPU_AI_API_KEY is None:
     pytest.exit("Error: Environment variable ZHIPU_AI_API_KEY must be set")
 

@@ -32,6 +32,8 @@ docker run -d -e RAGFLOW_HOST_IP=0.0.0.0 -e RAGFLOW_HOST_PORT=9380 ragflow:lates
 
 ### 环境变量配置
 
+- `ENABLE_GUNICORN`: 1 使用 Gunicorn（默认），0 使用 `python api/ragflow_server.py`
+- `GUNICORN_MODE`: Gunicorn 工作模式，可选 `gevent`（默认，异步）或 `sync`
 - `GUNICORN_WORKERS`: Gunicorn worker进程数（默认: 4）
 - `RAGFLOW_HOST_IP`: 绑定IP地址（默认: 0.0.0.0）
 - `RAGFLOW_HOST_PORT`: 绑定端口（默认: 9380）
@@ -124,7 +126,7 @@ A:
 
 ### Q: 如何回退到开发模式？
 
-A: 直接运行 `python api/ragflow_server.py`，但不推荐在生产环境使用。
+A: 将环境变量 `ENABLE_GUNICORN=0`，或直接运行 `python api/ragflow_server.py`，但不推荐在生产环境使用。
 
 ## 安全建议
 

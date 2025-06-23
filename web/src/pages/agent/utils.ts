@@ -1,4 +1,5 @@
 import {
+  IAgentForm,
   ICategorizeItem,
   ICategorizeItemResult,
 } from '@/interfaces/database/agent';
@@ -460,3 +461,28 @@ export const buildCategorizeObjectFromList = (list: Array<ICategorizeItem>) => {
     return pre;
   }, {});
 };
+
+export function getAgentNodeTools(agentNode?: RAGFlowNodeType) {
+  const tools: IAgentForm['tools'] = get(agentNode, 'data.form.tools', []);
+  return tools;
+}
+
+export function mapEdgeMouseEvent(
+  edges: Edge[],
+  edgeId: string,
+  isHovered: boolean,
+) {
+  const nextEdges = edges.map((element) =>
+    element.id === edgeId
+      ? {
+          ...element,
+          data: {
+            ...element.data,
+            isHovered,
+          },
+        }
+      : element,
+  );
+
+  return nextEdges;
+}

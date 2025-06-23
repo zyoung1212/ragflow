@@ -27,11 +27,11 @@ if os.environ.get('GUNICORN_WORKER_CLASS') == 'gevent':
 else:
     USE_GEVENT = False
 
-from api.utils.log_utils import initRootLogger
+from api.utils.log_utils import init_root_logger
 from plugin import GlobalPluginManager
 
 # Initialize logging first
-initRootLogger("ragflow_server")
+init_root_logger("ragflow_server")
 
 import logging
 import signal

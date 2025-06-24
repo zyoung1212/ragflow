@@ -32,7 +32,7 @@ CONSUMER_NO_END=0
 WORKERS=1
 GUNICORN_WORKERS=${GUNICORN_WORKERS:-4} # Number of Gunicorn workers for the web server
 ENABLE_GUNICORN=${ENABLE_GUNICORN:-1}  # Whether to start the web server via Gunicorn
-GUNICORN_MODE=${GUNICORN_MODE:-gevent} # Gunicorn worker class (gevent or sync)
+GUNICORN_MODE=${GUNICORN_MODE:-gthread} # Gunicorn worker class (gthread or sync)
 
 MCP_HOST="127.0.0.1"
 MCP_PORT=9382

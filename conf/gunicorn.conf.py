@@ -12,10 +12,10 @@ backlog = 100000
 
 # Worker processes
 workers = int(os.environ.get('GUNICORN_WORKERS', min(multiprocessing.cpu_count() * 2 + 1, 8)))
-worker_class = 'gevent'
+worker_class = 'gthread'
 
-# Gevent-specific settings
-worker_connections = 5000
+# Gthread-specific settings
+threads = int(os.environ.get('GUNICORN_THREADS', min(multiprocessing.cpu_count() * 4, 16)))
 timeout = 300
 keepalive = 10
 max_requests = 10000
@@ -56,7 +56,7 @@ raw_env = [
 
 def when_ready(server):
     """Called just after the server is started."""
-    server.log.info("RAGFlow Gunicorn server is ready. Production mode active.")
+    server.log.info("RAGFlow Gunicorn server is ready. Production mode active with gthread workers.")
 
 def worker_int(worker):
     """Called just after a worker exited on SIGINT or SIGQUIT."""

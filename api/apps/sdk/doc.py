@@ -1366,6 +1366,7 @@ def retrieval_test(tenant_id):
     if not isinstance(kb_ids, list):
         return get_error_data_result("`dataset_ids` should be a list")
     for id in kb_ids:
+        logging.error('start to check kb access')
         if not KnowledgebaseService.accessible(kb_id=id, user_id=tenant_id):
             return get_error_data_result(f"You don't own the dataset {id}.")
     kbs = KnowledgebaseService.get_by_ids(kb_ids)

@@ -373,11 +373,11 @@ class KnowledgebaseService(CommonService):
                 cached_result = REDIS_CONN.get(cache_key)
                 if cached_result is not None:
                     import logging
-                    logging.debug(f"Cache hit for knowledge base access check: {cache_key}")
+                    logging.error(f"Cache hit for knowledge base access check: {cache_key}")
                     return cached_result == "1"
         except Exception as e:
             import logging
-            logging.warning(f"Failed to get cache for kb access check {cache_key}: {str(e)}")
+            logging.error(f"Failed to get cache for kb access check {cache_key}: {str(e)}")
         
         # Cache miss or error, query database
         docs = cls.model.select(
@@ -393,10 +393,10 @@ class KnowledgebaseService(CommonService):
                 cache_value = "1" if is_accessible else "0"
                 REDIS_CONN.set(cache_key, cache_value, 60)
                 import logging
-                logging.debug(f"Cached knowledge base access result: {cache_key} = {cache_value}")
+                logging.error(f"Cached knowledge base access result: {cache_key} = {cache_value}")
         except Exception as e:
             import logging
-            logging.warning(f"Failed to cache kb access result {cache_key}: {str(e)}")
+            logging.error(f"Failed to cache kb access result {cache_key}: {str(e)}")
         
         return is_accessible
 

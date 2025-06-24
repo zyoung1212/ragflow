@@ -13,6 +13,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 #
+import os
 
 from api.utils.log_utils import init_root_logger
 from plugin import GlobalPluginManager

@@ -80,10 +80,17 @@ class DefaultEmbedding(Base):
         if not settings.LIGHTEN:
             # 第一次检查（无锁）- 快速路径，避免不必要的锁竞争
             if not DefaultEmbedding._model or model_name != DefaultEmbedding._model_name:
+                # 添加调试日志
+                logging.error(f"[EMBEDDING-INIT] 需要加载模型: {model_name}, 当前模型: {DefaultEmbedding._model_name}, 模型存在: {DefaultEmbedding._model is not None}")
+                
                 # 只有在真正需要初始化时才获取锁
                 with DefaultEmbedding._model_lock:
                     # 第二次检查（有锁）- 防止竞态条件
                     if not DefaultEmbedding._model or model_name != DefaultEmbedding._model_name:
+                        import time
+                        start_time = time.time()
+                        logging.error(f"[EMBEDDING-INIT] 开始加载FlagModel: {model_name}")
+                        
                         from FlagEmbedding import FlagModel
                         import torch
                         try:
@@ -99,6 +106,13 @@ class DefaultEmbedding(Base):
                                                                 query_instruction_for_retrieval="为这个句子生成表示以用于检索相关文章：",
                                                                 use_fp16=torch.cuda.is_available())
                             DefaultEmbedding._model_name = model_name
+                        
+                        end_time = time.time()
+                        logging.error(f"[EMBEDDING-INIT] FlagModel加载完成: {model_name}, 耗时: {(end_time - start_time)*1000:.2f}ms")
+                    else:
+                        logging.error(f"[EMBEDDING-INIT] 模型已被其他线程加载: {DefaultEmbedding._model_name}")
+            else:
+                logging.error(f"[EMBEDDING-INIT] 使用已缓存模型: {DefaultEmbedding._model_name}")
         
         # 无锁访问已加载的模型
         self._model = DefaultEmbedding._model
@@ -312,18 +326,25 @@ class FastEmbed(DefaultEmbedding):
             **kwargs,
     ):
         if not settings.LIGHTEN:
-            with FastEmbed._model_lock:
-                from fastembed import TextEmbedding
-                if not DefaultEmbedding._model or model_name != DefaultEmbedding._model_name:
-                    try:
-                        DefaultEmbedding._model = TextEmbedding(model_name, cache_dir, threads, **kwargs)
-                        DefaultEmbedding._model_name = model_name
-                    except Exception:
-                        cache_dir = snapshot_download(repo_id="BAAI/bge-small-en-v1.5",
-                                                      local_dir=os.path.join(get_home_cache_dir(),
-                                                                             re.sub(r"^[a-zA-Z0-9]+/", "", model_name)),
-                                                      local_dir_use_symlinks=False)
-                        DefaultEmbedding._model = TextEmbedding(model_name, cache_dir, threads, **kwargs)
+            # 第一次检查（无锁）- 快速路径
+            if not DefaultEmbedding._model or model_name != DefaultEmbedding._model_name:
+                # 使用正确的锁！
+                with DefaultEmbedding._model_lock:
+                    # 第二次检查（有锁）- 防止竞态条件
+                    if not DefaultEmbedding._model or model_name != DefaultEmbedding._model_name:
+                        from fastembed import TextEmbedding
+                        try:
+                            DefaultEmbedding._model = TextEmbedding(model_name, cache_dir, threads, **kwargs)
+                            DefaultEmbedding._model_name = model_name
+                        except Exception:
+                            cache_dir = snapshot_download(repo_id="BAAI/bge-small-en-v1.5",
+                                                          local_dir=os.path.join(get_home_cache_dir(),
+                                                                                 re.sub(r"^[a-zA-Z0-9]+/", "", model_name)),
+                                                          local_dir_use_symlinks=False)
+                            DefaultEmbedding._model = TextEmbedding(model_name, cache_dir, threads, **kwargs)
+                            DefaultEmbedding._model_name = model_name
+        
+        # 无锁访问已加载的模型
         self._model = DefaultEmbedding._model
         self._model_name = model_name
 
@@ -376,19 +397,26 @@ class XinferenceEmbed(Base):
 
 class YoudaoEmbed(Base):
     _client = None
+    _client_lock = threading.Lock()
 
     def __init__(self, key=None, model_name="maidalun1020/bce-embedding-base_v1", **kwargs):
-        if not settings.LIGHTEN and not YoudaoEmbed._client:
-            from BCEmbedding import EmbeddingModel as qanthing
-            try:
-                logging.info("LOADING BCE...")
-                YoudaoEmbed._client = qanthing(model_name_or_path=os.path.join(
-                    get_home_cache_dir(),
-                    "bce-embedding-base_v1"))
-            except Exception:
-                YoudaoEmbed._client = qanthing(
-                    model_name_or_path=model_name.replace(
-                        "maidalun1020", "InfiniFlow"))
+        if not settings.LIGHTEN:
+            # 第一次检查（无锁）- 快速路径
+            if not YoudaoEmbed._client:
+                # 只有在真正需要初始化时才获取锁
+                with YoudaoEmbed._client_lock:
+                    # 第二次检查（有锁）- 防止竞态条件
+                    if not YoudaoEmbed._client:
+                        from BCEmbedding import EmbeddingModel as qanthing
+                        try:
+                            logging.info("LOADING BCE...")
+                            YoudaoEmbed._client = qanthing(model_name_or_path=os.path.join(
+                                get_home_cache_dir(),
+                                "bce-embedding-base_v1"))
+                        except Exception:
+                            YoudaoEmbed._client = qanthing(
+                                model_name_or_path=model_name.replace(
+                                    "maidalun1020", "InfiniFlow"))
 
     def encode(self, texts: list):
         batch_size = 10

@@ -1425,20 +1425,41 @@ def retrieval_test(tenant_id):
     param_parse_end = time.time()
     logging.error(f"[RETRIEVAL-{request_id}] 参数解析完成, 问题: '{question[:50]}...', page: {page}, size: {size}, top_k: {top}, 耗时: {(param_parse_end - param_parse_start)*1000:.2f}ms")
     try:
-        # 模型初始化阶段
+        # 模型初始化阶段 - 详细拆分
         model_init_start = time.time()
+        
+        # 1. 获取tenant_ids
+        tenant_ids_start = time.time()
         tenant_ids = list(set([kb.tenant_id for kb in kbs]))
+        tenant_ids_end = time.time()
+        logging.error(f"[RETRIEVAL-{request_id}] 获取tenant_ids完成, 共{len(tenant_ids)}个, 耗时: {(tenant_ids_end - tenant_ids_start)*1000:.2f}ms")
+        
+        # 2. 获取知识库详细信息
+        kb_detail_start = time.time()
         e, kb = KnowledgebaseService.get_by_id(kb_ids[0])
         if not e:
             return get_error_data_result(message="Dataset not found!")
+        kb_detail_end = time.time()
+        logging.error(f"[RETRIEVAL-{request_id}] 获取知识库详情完成, kb_id: {kb_ids[0]}, embd_id: {kb.embd_id}, 耗时: {(kb_detail_end - kb_detail_start)*1000:.2f}ms")
+        
+        # 3. 初始化嵌入模型
+        embd_model_start = time.time()
         embd_mdl = LLMBundle(kb.tenant_id, LLMType.EMBEDDING, llm_name=kb.embd_id)
+        embd_model_end = time.time()
+        logging.error(f"[RETRIEVAL-{request_id}] 嵌入模型初始化完成, 模型: {kb.embd_id}, 耗时: {(embd_model_end - embd_model_start)*1000:.2f}ms")
 
+        # 4. 初始化重排模型（可选）
         rerank_mdl = None
         if req.get("rerank_id"):
+            rerank_model_start = time.time()
             rerank_mdl = LLMBundle(kb.tenant_id, LLMType.RERANK, llm_name=req["rerank_id"])
+            rerank_model_end = time.time()
+            logging.error(f"[RETRIEVAL-{request_id}] 重排模型初始化完成, 模型: {req['rerank_id']}, 耗时: {(rerank_model_end - rerank_model_start)*1000:.2f}ms")
+        else:
+            logging.error(f"[RETRIEVAL-{request_id}] 跳过重排模型初始化")
         
         model_init_end = time.time()
-        logging.error(f"[RETRIEVAL-{request_id}] 模型初始化完成, 嵌入模型: {kb.embd_id}, 重排模型: {req.get('rerank_id', 'None')}, 耗时: {(model_init_end - model_init_start)*1000:.2f}ms")
+        logging.error(f"[RETRIEVAL-{request_id}] 模型初始化阶段总耗时: {(model_init_end - model_init_start)*1000:.2f}ms")
 
         # 关键词提取阶段（可选）
         if req.get("keyword", False):

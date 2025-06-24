@@ -17,6 +17,8 @@ import datetime
 import logging
 import pathlib
 import re
+import time
+import uuid
 from io import BytesIO
 
 import xxhash
@@ -1359,16 +1361,35 @@ def retrieval_test(tenant_id):
                     format: float
                     description: Similarity score.
     """
+    # 为每次请求生成唯一ID
+    request_id = str(uuid.uuid4())[:8]
+    start_time = time.time()
+    
+    logging.error(f"[RETRIEVAL-{request_id}] 开始处理检索请求, tenant_id: {tenant_id}")
+    
     req = request.json
+    
+    # 参数验证阶段
+    validation_start = time.time()
     if not req.get("dataset_ids"):
         return get_error_data_result("`dataset_ids` is required.")
     kb_ids = req["dataset_ids"]
     if not isinstance(kb_ids, list):
         return get_error_data_result("`dataset_ids` should be a list")
+    
+    # 权限检查阶段
+    permission_start = time.time()
+    logging.error(f"[RETRIEVAL-{request_id}] 参数验证完成, 耗时: {(permission_start - validation_start)*1000:.2f}ms")
+    
     for id in kb_ids:
-        logging.error('start to check kb access')
         if not KnowledgebaseService.accessible(kb_id=id, user_id=tenant_id):
             return get_error_data_result(f"You don't own the dataset {id}.")
+    
+    permission_end = time.time()
+    logging.error(f"[RETRIEVAL-{request_id}] 权限检查完成, 检查了{len(kb_ids)}个数据集, 耗时: {(permission_end - permission_start)*1000:.2f}ms")
+    
+    # 数据集信息获取阶段
+    dataset_info_start = time.time()
     kbs = KnowledgebaseService.get_by_ids(kb_ids)
     embd_nms = list(set([TenantLLMService.split_model_name_and_factory(kb.embd_id)[0] for kb in kbs]))  # remove vendor suffix for comparison
     if len(embd_nms) != 1:
@@ -1376,6 +1397,11 @@ def retrieval_test(tenant_id):
             message='Datasets use different embedding models."',
             code=settings.RetCode.DATA_ERROR,
         )
+    dataset_info_end = time.time()
+    logging.error(f"[RETRIEVAL-{request_id}] 数据集信息获取完成, 嵌入模型: {embd_nms[0]}, 耗时: {(dataset_info_end - dataset_info_start)*1000:.2f}ms")
+    
+    # 参数解析阶段
+    param_parse_start = time.time()
     if "question" not in req:
         return get_error_data_result("`question` is required.")
     page = int(req.get("page", 1))
@@ -1396,7 +1422,11 @@ def retrieval_test(tenant_id):
         highlight = False
     else:
         highlight = True
+    param_parse_end = time.time()
+    logging.error(f"[RETRIEVAL-{request_id}] 参数解析完成, 问题: '{question[:50]}...', page: {page}, size: {size}, top_k: {top}, 耗时: {(param_parse_end - param_parse_start)*1000:.2f}ms")
     try:
+        # 模型初始化阶段
+        model_init_start = time.time()
         tenant_ids = list(set([kb.tenant_id for kb in kbs]))
         e, kb = KnowledgebaseService.get_by_id(kb_ids[0])
         if not e:
@@ -1406,11 +1436,21 @@ def retrieval_test(tenant_id):
         rerank_mdl = None
         if req.get("rerank_id"):
             rerank_mdl = LLMBundle(kb.tenant_id, LLMType.RERANK, llm_name=req["rerank_id"])
+        
+        model_init_end = time.time()
+        logging.error(f"[RETRIEVAL-{request_id}] 模型初始化完成, 嵌入模型: {kb.embd_id}, 重排模型: {req.get('rerank_id', 'None')}, 耗时: {(model_init_end - model_init_start)*1000:.2f}ms")
 
+        # 关键词提取阶段（可选）
         if req.get("keyword", False):
+            keyword_start = time.time()
             chat_mdl = LLMBundle(kb.tenant_id, LLMType.CHAT)
+            original_question = question
             question += keyword_extraction(chat_mdl, question)
+            keyword_end = time.time()
+            logging.error(f"[RETRIEVAL-{request_id}] 关键词提取完成, 原问题: '{original_question}', 扩展后: '{question}', 耗时: {(keyword_end - keyword_start)*1000:.2f}ms")
 
+        # 主检索阶段
+        retrieval_start = time.time()
         ranks = settings.retrievaler.retrieval(
             question,
             embd_mdl,
@@ -1426,11 +1466,20 @@ def retrieval_test(tenant_id):
             highlight=highlight,
             rank_feature=label_question(question, kbs),
         )
+        retrieval_end = time.time()
+        logging.error(f"[RETRIEVAL-{request_id}] 主检索完成, 找到 {len(ranks.get('chunks', []))} 个chunks, 耗时: {(retrieval_end - retrieval_start)*1000:.2f}ms")
+        
+        # KG检索阶段（可选）
         if use_kg:
+            kg_start = time.time()
             ck = settings.kg_retrievaler.retrieval(question, [k.tenant_id for k in kbs], kb_ids, embd_mdl, LLMBundle(kb.tenant_id, LLMType.CHAT))
             if ck["content_with_weight"]:
                 ranks["chunks"].insert(0, ck)
+            kg_end = time.time()
+            logging.error(f"[RETRIEVAL-{request_id}] KG检索完成, 是否有结果: {bool(ck.get('content_with_weight'))}, 耗时: {(kg_end - kg_start)*1000:.2f}ms")
 
+        # 结果处理阶段
+        process_start = time.time()
         for c in ranks["chunks"]:
             c.pop("vector", None)
 
@@ -1452,8 +1501,18 @@ def retrieval_test(tenant_id):
                 rename_chunk[new_key] = value
             renamed_chunks.append(rename_chunk)
         ranks["chunks"] = renamed_chunks
+        
+        process_end = time.time()
+        total_time = process_end - start_time
+        logging.error(f"[RETRIEVAL-{request_id}] 结果处理完成, 最终返回 {len(renamed_chunks)} 个chunks, 处理耗时: {(process_end - process_start)*1000:.2f}ms")
+        logging.error(f"[RETRIEVAL-{request_id}] 请求处理完成, 总耗时: {total_time*1000:.2f}ms")
+        
         return get_result(data=ranks)
     except Exception as e:
+        error_time = time.time()
+        total_error_time = error_time - start_time
+        logging.error(f"[RETRIEVAL-{request_id}] 处理异常, 异常信息: {str(e)}, 异常发生时总耗时: {total_error_time*1000:.2f}ms")
+        
         if str(e).find("not_found") > 0:
             return get_result(
                 message="No chunk found! Check the chunk status please!",

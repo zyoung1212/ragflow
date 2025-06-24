@@ -8,18 +8,18 @@ from rag.nlp import search
 
 # Server socket
 bind = f"{os.environ.get('RAGFLOW_HOST_IP', '0.0.0.0')}:{os.environ.get('RAGFLOW_HOST_PORT', '9380')}"
-backlog = 2048
+backlog = 100000
 
 # Worker processes
 workers = int(os.environ.get('GUNICORN_WORKERS', min(multiprocessing.cpu_count() * 2 + 1, 8)))
 worker_class = 'gevent'
 
 # Gevent-specific settings
-worker_connections = 1000
+worker_connections = 5000
 timeout = 300
 keepalive = 10
-max_requests = 2000
-max_requests_jitter = 200
+max_requests = 10000
+max_requests_jitter = 1000
 
 preload_app = False
 

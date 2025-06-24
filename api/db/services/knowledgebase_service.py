@@ -358,19 +358,47 @@ class KnowledgebaseService(CommonService):
     @classmethod
     @DB.connection_context()
     def accessible(cls, kb_id, user_id):
-        # Check if a knowledge base is accessible by a user
+        # Check if a knowledge base is accessible by a user with Redis cache
         # Args:
         #     kb_id: Knowledge base ID
         #     user_id: User ID
         # Returns:
         #     Boolean indicating accessibility
+        
+        # Try to get from cache first
+        cache_key = f"kb_access:{kb_id}:{user_id}"
+        try:
+            from rag.utils.redis_conn import REDIS_CONN
+            if REDIS_CONN.is_alive():
+                cached_result = REDIS_CONN.get(cache_key)
+                if cached_result is not None:
+                    import logging
+                    logging.debug(f"Cache hit for knowledge base access check: {cache_key}")
+                    return cached_result == "1"
+        except Exception as e:
+            import logging
+            logging.warning(f"Failed to get cache for kb access check {cache_key}: {str(e)}")
+        
+        # Cache miss or error, query database
         docs = cls.model.select(
             cls.model.id).join(UserTenant, on=(UserTenant.tenant_id == Knowledgebase.tenant_id)
                                ).where(cls.model.id == kb_id, UserTenant.user_id == user_id).paginate(0, 1)
         docs = docs.dicts()
-        if not docs:
-            return False
-        return True
+        is_accessible = bool(docs)
+        
+        # Cache the result for 1 minute
+        try:
+            from rag.utils.redis_conn import REDIS_CONN
+            if REDIS_CONN.is_alive():
+                cache_value = "1" if is_accessible else "0"
+                REDIS_CONN.set(cache_key, cache_value, 60)
+                import logging
+                logging.debug(f"Cached knowledge base access result: {cache_key} = {cache_value}")
+        except Exception as e:
+            import logging
+            logging.warning(f"Failed to cache kb access result {cache_key}: {str(e)}")
+        
+        return is_accessible
 
     @classmethod
     @DB.connection_context()

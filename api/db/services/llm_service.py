@@ -14,6 +14,8 @@
 #  limitations under the License.
 #
 import logging
+import threading
+from typing import Dict, Tuple
 
 from langfuse import Langfuse
 
@@ -204,7 +206,33 @@ class TenantLLMService(CommonService):
 
 
 class LLMBundle:
+    # 类级别的缓存字典和锁
+    _cache: Dict[Tuple[str, str, str, str], 'LLMBundle'] = {}
+    _cache_lock = threading.RLock()
+    
+    def __new__(cls, tenant_id, llm_type, llm_name=None, lang="Chinese"):
+        # 生成缓存键
+        cache_key = (str(tenant_id), str(llm_type), str(llm_name or ""), str(lang))
+        
+        # 双重检查锁定模式
+        if cache_key in cls._cache:
+            return cls._cache[cache_key]
+            
+        with cls._cache_lock:
+            # 再次检查，防止并发创建
+            if cache_key in cls._cache:
+                return cls._cache[cache_key]
+                
+            # 创建新实例
+            instance = super().__new__(cls)
+            cls._cache[cache_key] = instance
+            return instance
+    
     def __init__(self, tenant_id, llm_type, llm_name=None, lang="Chinese"):
+        # 检查是否已经初始化过（防止重复初始化缓存的实例）
+        if hasattr(self, '_initialized'):
+            return
+        
         self.tenant_id = tenant_id
         self.llm_type = llm_type
         self.llm_name = llm_name
@@ -223,6 +251,20 @@ class LLMBundle:
                 self.trace = self.langfuse.trace(name=f"{self.llm_type}-{self.llm_name}")
         else:
             self.langfuse = None
+            
+        # 标记为已初始化
+        self._initialized = True
+
+    @classmethod
+    def clear_cache(cls):
+        """清空LLMBundle缓存"""
+        with cls._cache_lock:
+            cls._cache.clear()
+            
+    @classmethod 
+    def get_cache_size(cls):
+        """获取当前缓存大小"""
+        return len(cls._cache)
 
     def bind_tools(self, toolcall_session, tools):
         if not self.is_tools:
